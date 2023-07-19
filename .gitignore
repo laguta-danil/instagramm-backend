@@ -3,6 +3,8 @@
 /node_modules
 .env
 .vercel
+.github
+
 
 # Logs
 logs
@@ -35,3 +37,4 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.vercel
