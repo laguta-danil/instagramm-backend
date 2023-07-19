@@ -5,9 +5,16 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
+  pull_request:
+    branches:
+      - '*'
+    types: [ opened, edited, reopened ]
   push:
     branches:
-      - staging
+      - master
+    paths-ignore:
+      - '.github/workflows/*'
+
 jobs:
   Tests:
     name: Tests # название конктретной работы в pipeline
@@ -15,10 +22,28 @@ jobs:
     steps:
       - name: Checkout # клонируем репозиторый
         uses: actions/checkout@v2
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
       - name: Install dependencies
-        run: yarn # устанавливаем зависимости
-      - name: Test
-        run: yarn test # запускаем скрипт тестами
+        run: yarn install --frozen-lockfile
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Run tests
+        run: yarn test:e2e
+
+      - name: Run linter
+        run: yarn lint
+
+      - name: Run build
+        run: yarn build`
+
   Deploy-Preview:
     runs-on: ubuntu-latest
     needs: Tests
