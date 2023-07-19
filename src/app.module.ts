@@ -14,7 +14,8 @@ import { join } from 'path';
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client')
+      rootPath: join(__dirname, '..', 'swagger-static'),
+      serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger'
     }),
     MailerModule.forRootAsync({ useClass: MailerConfig }),
     EmailModule
