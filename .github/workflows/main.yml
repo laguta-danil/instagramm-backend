@@ -42,7 +42,7 @@ jobs:
         run: yarn lint
 
       - name: Run build
-        run: yarn build`
+        run: yarn build
 
   Deploy-Preview:
     runs-on: ubuntu-latest
