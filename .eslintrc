@@ -100,13 +100,7 @@
         "next": "return"
       }
     ],
-    "no-restricted-syntax": [
-      "warn",
-      {
-        "selector": "TSEnumDeclaration",
-        "message": "Don't declare enums"
-      }
-    ],
+    "no-restricted-syntax": "off",
     "eslint-comments/require-description": "warn",
     "sort-export-all/sort-export-all": "warn",
     "curly": "warn",
