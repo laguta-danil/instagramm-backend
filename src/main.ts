@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { resolve } from 'path';
-import { writeFileSync, createWriteStream } from 'fs';
+import { createWriteStream } from 'fs';
 import { get } from 'http';
 import * as process from 'process';
 
