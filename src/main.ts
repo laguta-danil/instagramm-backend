@@ -1,8 +1,9 @@
-import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { createWriteStream } from 'fs';
 import { get } from 'http';
 import * as process from 'process';
+
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 
@@ -10,7 +11,7 @@ const config = new DocumentBuilder()
   .setTitle('Backend Generator')
   .setDescription('Documentation API Test')
   .setVersion('1.0')
-  .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
+  .addBearerAuth({ bearerFormat: 'JWT', scheme: 'bearer', type: 'http' })
   .build();
 
 async function bootstrap() {
