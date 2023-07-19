@@ -17,10 +17,10 @@ on:
 
 jobs:
   Tests:
-    name: Tests
+    name: Tests # название конктретной работы в pipeline
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout # клонируем репозиторый
         uses: actions/checkout@v2
 
       - name: Restore dependencies cache
