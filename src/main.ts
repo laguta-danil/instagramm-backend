@@ -1,11 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as fs from 'fs';
-import { createWriteStream } from 'fs';
-import * as https from 'https';
-import * as path from 'path';
-import * as process from 'process';
-import swaggerUI from 'swagger-ui-express';
 
 import { AppModule } from './app.module';
 
