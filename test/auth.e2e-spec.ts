@@ -10,11 +10,11 @@ describe('Auth (e2e)', () => {
   let userFabrica: UserFabrica;
 
   beforeAll(async () => {
-    const { myServer } = await myBeforeAll();
+    const { myServer, prisma } = await myBeforeAll();
 
     server = myServer;
 
-    userFabrica = new UserFabrica(server);
+    userFabrica = new UserFabrica(server, prisma);
   });
 
   describe('registration', () => {

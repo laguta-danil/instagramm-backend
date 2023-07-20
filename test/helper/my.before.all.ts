@@ -2,6 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { AppModule } from '../../src/app.module';
+import { PrismaService } from '../../src/database/prisma.service';
 import { initApp } from '../../src/utils/init.app';
 
 export const myBeforeAll = async () => {
@@ -16,5 +17,7 @@ export const myBeforeAll = async () => {
   await app.init();
   const server = app.getHttpServer();
 
-  return { myServer: server };
+  const prisma = app.get(PrismaService);
+
+  return { myServer: server, prisma };
 };

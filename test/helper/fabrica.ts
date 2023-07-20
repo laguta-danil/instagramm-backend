@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { PrismaService } from '../../src/database/prisma.service';
 
 interface UserData {
   login: string;
@@ -7,7 +8,10 @@ interface UserData {
 }
 
 export class UserFabrica {
-  constructor(private readonly server: any) {}
+  constructor(
+    private readonly server: any,
+    private readonly prisma: PrismaService
+  ) {}
 
   createtUserData(quantity: number): UserData[] {
     const userData: UserData[] = [];
