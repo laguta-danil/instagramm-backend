@@ -1,16 +1,24 @@
-import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from './../src/app.module';
+import request from 'supertest';
+import { RegisterUrl } from './helper/endpoints';
+import { UserFabrica } from './helper/fabrica';
+import { myBeforeAll } from './helper/my.before.all';
 
 describe('Auth (e2e)', () => {
-  let app: INestApplication;
+  let server: any;
+
+  let userFabrica: UserFabrica;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
-    }).compile();
+    const { myServer } = await myBeforeAll();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    server = myServer;
+
+    userFabrica = new UserFabrica(server);
+  });
+
+  describe('registration', () => {
+    it('should be send register email', async () => {
+      const res = await request(server).post(RegisterUrl);
+    });
   });
 });
