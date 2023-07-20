@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { PrismaService } from '../../src/database/prisma.service';
 
+export const IncorrectUuid = 'a6db59ed-2550-404d-801a-244d3115cf82';
+
 interface UserData {
   login: string;
   email: string;

@@ -2,7 +2,8 @@ import request from 'supertest';
 
 import { HttpStatus } from '@nestjs/common';
 import { ConfirmRegisterUrl, RegisterUrl } from './helper/endpoints';
-import { UserFabrica } from './helper/fabrica';
+import { errorsData } from './helper/errors.data';
+import { IncorrectUuid, UserFabrica } from './helper/fabrica';
 import { myBeforeAll } from './helper/my.before.all';
 
 describe('Auth (e2e)', () => {
@@ -35,10 +36,26 @@ describe('Auth (e2e)', () => {
         ud0.email
       );
 
-      expect(res.status).toBe(HttpStatus.NOT_FOUND);
-      expect(confirmRes.status).toBe(HttpStatus.NOT_FOUND);
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(confirmRes.status).toBe(HttpStatus.NO_CONTENT);
       expect(beforeConfirm.isConfirmed).toBe(false);
       expect(afterConfirm.isConfirmed).toBe(true);
+    });
+
+    it("shouldn't register if incorrect code", async () => {
+      const [ud0] = userFabrica.createtUserData(1);
+
+      const res = await request(server).post(RegisterUrl).send(ud0);
+
+      const confirmRes = await request(server)
+        .post(ConfirmRegisterUrl)
+        .send({ code: IncorrectUuid });
+
+      const errors = errorsData('code');
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(confirmRes.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(confirmRes.body).toEqual(errors);
     });
   });
 });
