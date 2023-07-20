@@ -57,5 +57,18 @@ describe('Auth (e2e)', () => {
       expect(confirmRes.status).toBe(HttpStatus.BAD_REQUEST);
       expect(confirmRes.body).toEqual(errors);
     });
+
+    it("shouldn't register user with incorrect data", async () => {
+      const [ud0] = userFabrica.createtUserData(1);
+
+      const res = await request(server)
+        .post(RegisterUrl)
+        .send({ login: ud0.login });
+
+      const errors = errorsData('email', 'password');
+
+      expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(res.body).toEqual(errors);
+    });
   });
 });
