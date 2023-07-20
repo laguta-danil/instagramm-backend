@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import request from 'supertest';
 import { RegisterUrl } from './helper/endpoints';
 import { UserFabrica } from './helper/fabrica';
@@ -18,7 +19,11 @@ describe('Auth (e2e)', () => {
 
   describe('registration', () => {
     it('should be send register email', async () => {
-      const res = await request(server).post(RegisterUrl);
+      const [ud0] = userFabrica.createtUserData(1);
+
+      const res = await request(server).post(RegisterUrl).send(ud0);
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
     });
   });
 });
