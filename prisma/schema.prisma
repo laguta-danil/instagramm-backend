@@ -16,7 +16,7 @@ model User {
   login             String             @unique
   passwordHash      String             @unique @map("pass_hash")
   createdAt         DateTime           @default(now()) @map("created_at")
-  updatedAt         DateTime           @updatedAt @map("updated_at")
+  updatedAt         DateTime           @default(now()) @updatedAt @map("updated_at")
   UsersConfirmEmail UsersConfirmEmail?
 
   @@map("user")

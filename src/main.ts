@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { initApp } from './utils/init.app';
 import { SwaggerConfig } from './utils/swagger';
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

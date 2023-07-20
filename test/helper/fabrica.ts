@@ -26,4 +26,10 @@ export class UserFabrica {
 
     return userData;
   }
+
+  async getUsersConfirmEmailByEmail(email: string) {
+    return await this.prisma.usersConfirmEmail.findFirst({
+      where: { user: { email } }
+    });
+  }
 }
