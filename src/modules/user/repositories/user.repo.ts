@@ -17,12 +17,8 @@ export class UsersRepo {
   }
 
   async checkUserByEmailOrLogin(emailOrLogin: string) {
-    const res = await this.prisma.user.findFirst({
+    return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
     });
-
-    console.log('checkUserByEmailOrLogin', res);
-
-    return res;
   }
 }

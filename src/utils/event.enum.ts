@@ -1,0 +1,3 @@
+export enum EventEnum {
+  SEND_REGISTER_EMAIL_EVENT = 'SEND_REGISTER_EMAIL_EVENT'
+}

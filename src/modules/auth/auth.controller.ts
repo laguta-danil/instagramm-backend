@@ -9,7 +9,7 @@ import { RegisterCommand } from './use-case/registration.use-case';
 export class AuthController {
   constructor(private readonly commandBus: CommandBus) {}
 
-  @Post()
+  @Post('/registration')
   @HttpCode(HttpStatus.NO_CONTENT)
   registration(@Body() dto: CreateUserDto) {
     return this.commandBus.execute(new RegisterCommand(dto));

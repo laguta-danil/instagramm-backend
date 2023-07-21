@@ -1,8 +1,10 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { OnEvent } from '@nestjs/event-emitter';
 
 import { EnvEnum } from '../../utils/env.enum';
+import { EventEnum } from '../../utils/event.enum';
 
 const { MAILER_SUBJECT } = EnvEnum;
 
@@ -15,6 +17,7 @@ export class EmailService {
     private configService: ConfigService
   ) {}
 
+  @OnEvent(EventEnum.SEND_REGISTER_EMAIL_EVENT)
   async sendRegistrationEmail(email: string, code: string) {
     try {
       await this.mailerService.sendMail({
