@@ -10,6 +10,7 @@ import { AppService } from './app.service';
 import { MailerConfig } from './config/mailer.config';
 import { DatabaseModule } from './database/database.module';
 import { EmailModule } from './modules/email/email.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   controllers: [AppController],
@@ -23,7 +24,8 @@ import { EmailModule } from './modules/email/email.module';
     // db
     DatabaseModule,
     // modules
-    EmailModule
+    EmailModule,
+    AuthModule
   ],
   providers: [AppService]
 })
