@@ -11,6 +11,7 @@ import { MailerConfig } from './config/mailer.config';
 import { DatabaseModule } from './database/database.module';
 import { EmailModule } from './modules/email/email.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   controllers: [AppController],
@@ -25,7 +26,8 @@ import { AuthModule } from './modules/auth/auth.module';
     DatabaseModule,
     // modules
     EmailModule,
-    AuthModule
+    AuthModule,
+    UserModule
   ],
   providers: [AppService]
 })
