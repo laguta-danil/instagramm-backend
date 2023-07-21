@@ -21,9 +21,7 @@ export class EmailService {
   async sendRegistrationEmail(email: string, code: string) {
     try {
       await this.mailerService.sendMail({
-        context: {
-          code
-        },
+        context: { code },
         subject: this.configService.get(MAILER_SUBJECT),
         template: './register',
         to: email
