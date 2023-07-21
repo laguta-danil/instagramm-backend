@@ -6,7 +6,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { EnvEnum } from '../../utils/env.enum';
 import { EventEnum } from '../../utils/event.enum';
 
-const { MAILER_SUBJECT } = EnvEnum;
+const { MAILER_SUBJECT, FRONTEND_CONFIRM_EMAIL_LINK } = EnvEnum;
 
 @Injectable()
 export class EmailService {
@@ -21,7 +21,10 @@ export class EmailService {
   async sendRegistrationEmail(email: string, code: string) {
     try {
       await this.mailerService.sendMail({
-        context: { code },
+        context: {
+          code,
+          link: this.configService.get(FRONTEND_CONFIRM_EMAIL_LINK)
+        },
         subject: this.configService.get(MAILER_SUBJECT),
         template: './register',
         to: email
