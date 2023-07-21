@@ -30,7 +30,7 @@ export class UserFabrica {
   }
 
   async getUsersConfirmEmailByEmail(email: string) {
-    return await this.prisma.usersConfirmEmail.findFirst({
+    return this.prisma.usersConfirmEmail.findFirst({
       where: { user: { email } }
     });
   }
