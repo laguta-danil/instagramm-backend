@@ -8,7 +8,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MailerConfig } from './config/mailer.config';
+import { DatabaseModule } from './database/database.module';
 import { EmailModule } from './modules/email/email.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   controllers: [AppController],
@@ -19,7 +21,11 @@ import { EmailModule } from './modules/email/email.module';
       serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger'
     }),
     MailerModule.forRootAsync({ useClass: MailerConfig }),
-    EmailModule
+    // db
+    DatabaseModule,
+    // modules
+    EmailModule,
+    AuthModule
   ],
   providers: [AppService]
 })

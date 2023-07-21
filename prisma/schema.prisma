@@ -7,16 +7,28 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTRGRES_LOCAL_BASE")
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  login        String   @unique
-  passwordHash String   @unique @map("pass_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id                String             @id @default(uuid())
+  email             String             @unique
+  login             String             @unique
+  passwordHash      String             @unique @map("pass_hash")
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @default(now()) @updatedAt @map("updated_at")
+  usersConfirmEmail UsersConfirmEmail?
 
   @@map("user")
+}
+
+model UsersConfirmEmail {
+  id             String   @id @default(uuid())
+  isConfirmed    Boolean  @default(false) @map("is_confirmed")
+  confirmCode    String   @unique @map("confirm_code")
+  experationDate DateTime @map("expr_date")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String   @unique @map("user_id")
+
+  @@map("users_confirm_email")
 }
