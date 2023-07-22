@@ -14,7 +14,7 @@ export class SwaggerConfig {
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('/swagger', app, document, {
+    SwaggerModule.setup('/', app, document, {
       customCssUrl:
         'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
       customJs: [

@@ -17,10 +17,6 @@ import { UserModule } from './modules/user/user.module';
   controllers: [AppController],
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'swagger-static'),
-      serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/swagger'
-    }),
     MailerModule.forRootAsync({ useClass: MailerConfig }),
     // db
     DatabaseModule,
