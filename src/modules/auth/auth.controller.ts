@@ -5,6 +5,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/create.dto';
 
 import { ApiRegistration } from './auth.swagger';
+import { ConfirmRegisterDto } from './dto/confirm.register.dto';
 import { RegisterCommand } from './use-case/registration.use-case';
 
 @ApiTags('Auth')
@@ -17,5 +18,11 @@ export class AuthController {
   @ApiRegistration()
   registration(@Body() dto: CreateUserDto) {
     return this.commandBus.execute(new RegisterCommand(dto));
+  }
+
+  @Post('/registration-confirmation')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  confirmRegister(@Body() dto: ConfirmRegisterDto) {
+    return dto;
   }
 }
