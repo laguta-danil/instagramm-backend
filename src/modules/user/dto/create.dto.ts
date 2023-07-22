@@ -24,8 +24,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'User password',
     example: 'qwerty123',
-    minLength: 6,
-    uniqueItems: true
+    minLength: 6
   })
   @Length(6)
   @Trim()

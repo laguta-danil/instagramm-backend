@@ -4,7 +4,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from '../user/dto/create.dto';
 
-import { ApiRegistration } from './auth.swagger';
+import { ApiConfirmRegistration, ApiRegistration } from './auth.swagger';
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
 import { ConfirmRegisterCommand } from './use-case/confirm.register.use-case';
 import { RegisterCommand } from './use-case/registration.use-case';
@@ -23,6 +23,7 @@ export class AuthController {
 
   @Post('/registration-confirmation')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiConfirmRegistration()
   confirmRegister(@Body() dto: ConfirmRegisterDto) {
     return this.commandBus.execute(new ConfirmRegisterCommand(dto.code));
   }

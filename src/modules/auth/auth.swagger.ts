@@ -9,6 +9,8 @@ import {
 import { apiBadRequestResponse } from '../../utils/swagger/api.error.response';
 import { CreateUserDto } from '../user/dto/create.dto';
 
+import { ConfirmRegisterDto } from './dto/confirm.register.dto';
+
 export function ApiRegistration() {
   return applyDecorators(
     ApiOperation({ summary: 'Registration user' }),
@@ -16,6 +18,18 @@ export function ApiRegistration() {
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
       description: 'Send registration email with code to user',
+      status: HttpStatus.NO_CONTENT
+    })
+  );
+}
+
+export function ApiConfirmRegistration() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Confirm registration' }),
+    ApiBody({ type: ConfirmRegisterDto }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Success registration',
       status: HttpStatus.NO_CONTENT
     })
   );
