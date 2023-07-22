@@ -36,7 +36,7 @@ export class RegisterUseCase implements ICommandHandler<RegisterCommand> {
 
     await this.usersRepo.registerUser({
       confirmCode: code,
-      experationDate: this._addMinutesToCurrentDate(2),
+      expirationDate: this._addMinutesToCurrentDate(2),
       userId: id
     });
 

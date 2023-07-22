@@ -1,5 +1,5 @@
 import { createWriteStream } from 'fs';
-import { get } from 'http';
+import * as https from 'https';
 
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -19,7 +19,7 @@ export class SwaggerConfig {
     // get the swagger json file (if app is running in development mode)
     if (process.env.NODE_ENV === 'development') {
       // write swagger ui files
-      get(
+      https.get(
         `${process.env.DEPLOYED_URL}/swagger/swagger-ui-bundle.js`,
         function (response) {
           response.pipe(
@@ -31,7 +31,7 @@ export class SwaggerConfig {
         }
       );
 
-      get(
+      https.get(
         `${process.env.DEPLOYED_URL}/swagger/swagger-ui-init.js`,
         function (response) {
           response.pipe(createWriteStream('swagger-static/swagger-ui-init.js'));
@@ -41,7 +41,7 @@ export class SwaggerConfig {
         }
       );
 
-      get(
+      https.get(
         `${process.env.DEPLOYED_URL}/swagger/swagger-ui-standalone-preset.js`,
         function (response) {
           response.pipe(
@@ -53,7 +53,7 @@ export class SwaggerConfig {
         }
       );
 
-      get(
+      https.get(
         `${process.env.DEPLOYED_URL}/swagger/swagger-ui.css`,
         function (response) {
           response.pipe(createWriteStream('swagger-static/swagger-ui.css'));
