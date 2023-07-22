@@ -3,6 +3,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { PrismaService } from '../../database/prisma.service';
+import { IsValidConfirmCode } from '../../infra/decorator/auth/is.valid.confirm.code';
 import { ExistUserByLoginOrEmail } from '../../infra/decorator/user/exist.user.by.login-email';
 import { UsersRepo } from '../user/repositories/user.repo';
 
@@ -21,7 +22,8 @@ import { RegisterUseCase } from './use-case/registration.use-case';
     // use-case
     RegisterUseCase,
     // validation
-    ExistUserByLoginOrEmail
+    ExistUserByLoginOrEmail,
+    IsValidConfirmCode
   ]
 })
 export class AuthModule {}

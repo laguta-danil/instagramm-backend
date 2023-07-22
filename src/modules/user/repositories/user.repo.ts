@@ -16,6 +16,13 @@ export class UsersRepo {
     this.prisma.usersConfirmEmail.create({ data: dto });
   }
 
+  async getConfirmEmailInfoByCode(code: string) {
+    return this.prisma.usersConfirmEmail.findUnique({
+      select: { experationDate: true, isConfirmed: true },
+      where: { confirmCode: code }
+    });
+  }
+
   async checkUserByEmailOrLogin(emailOrLogin: string) {
     return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
