@@ -31,6 +31,7 @@ export class UserFabrica {
 
   async getUsersConfirmEmailByEmail(email: string) {
     return this.prisma.usersConfirmEmail.findFirst({
+      select: { confirmCode: true, isConfirmed: true },
       where: { user: { email } }
     });
   }

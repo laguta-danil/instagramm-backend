@@ -1,8 +1,9 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 import { initApp } from './utils/init.app';
-import { SwaggerConfig } from './utils/swagger';
+import { SwaggerConfig } from './utils/swagger/swagger';
 
 const PORT = process.env.PORT;
 
@@ -14,7 +15,7 @@ async function bootstrap() {
   SwaggerConfig.create(app);
 
   await app.listen(PORT, () => {
-    console.log(`App started at: ${PORT} port`);
+    Logger.log(`App started at: ${PORT} port`);
   });
 }
 bootstrap();

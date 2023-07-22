@@ -13,7 +13,21 @@ export class UsersRepo {
   }
 
   async registerUser(dto: RegisterDbDto) {
-    this.prisma.usersConfirmEmail.create({ data: dto });
+    return this.prisma.usersConfirmEmail.create({ data: dto });
+  }
+
+  async getConfirmEmailInfoByCode(code: string) {
+    return this.prisma.usersConfirmEmail.findUnique({
+      select: { experationDate: true, isConfirmed: true },
+      where: { confirmCode: code }
+    });
+  }
+
+  async setConfirmRegister(code: string) {
+    return this.prisma.usersConfirmEmail.update({
+      data: { isConfirmed: true },
+      where: { confirmCode: code }
+    });
   }
 
   async checkUserByEmailOrLogin(emailOrLogin: string) {
