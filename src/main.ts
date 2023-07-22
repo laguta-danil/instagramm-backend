@@ -12,7 +12,7 @@ async function bootstrap() {
 
   initApp(app);
 
-  SwaggerConfig.create(app);
+  // SwaggerConfig.create(app);
 
   await app.listen(PORT, () => {
     Logger.log(`App started at: ${PORT} port`);
