@@ -15,7 +15,7 @@ export class UserFabrica {
     private readonly prisma: PrismaService
   ) {}
 
-  createtUserData(quantity: number): UserData[] {
+  createUserData(quantity: number): UserData[] {
     const userData: UserData[] = [];
 
     for (let i = 0; i < quantity; i++) {
