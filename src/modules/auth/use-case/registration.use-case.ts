@@ -4,6 +4,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { hash } from 'bcrypt';
 
+import { addMinutesToCurrentDate } from '../../../helper/add.minutes.to.current.date';
 import { EventEnum } from '../../../utils/event.enum';
 import { CreateUserServiceDto } from '../../user/dto/create.dto';
 import { UsersRepo } from '../../user/repositories/user.repo';
@@ -36,14 +37,10 @@ export class RegisterUseCase implements ICommandHandler<RegisterCommand> {
 
     await this.usersRepo.registerUser({
       confirmCode: code,
-      expirationDate: this._addMinutesToCurrentDate(2),
+      expirationDate: addMinutesToCurrentDate(2),
       userId: id
     });
 
     this.eventEmitter.emit(SEND_REGISTER_EMAIL_EVENT, email, code);
-  }
-
-  private _addMinutesToCurrentDate(minutes: number) {
-    return new Date(new Date().getTime() + 60000 * minutes).toISOString();
   }
 }

@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto';
 
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import { addMinutesToCurrentDate } from '../../../helper/add.minutes.to.current.date';
 import { EmailService } from '../../email/email.service';
 import { UsersRepo } from '../../user/repositories/user.repo';
 
@@ -22,13 +23,9 @@ export class ResendingUseCase implements ICommandHandler<ResendingCommand> {
     await this.usersRepo.updateConfirmEmailInfo({
       email,
       newCode,
-      newExpDate: this._addMinutesToCurrentDate(2)
+      newExpDate: addMinutesToCurrentDate(2)
     });
 
     return this.emailService.sendRegistrationEmail(email, newCode);
-  }
-
-  private _addMinutesToCurrentDate(minutes: number) {
-    return new Date(new Date().getTime() + 60000 * minutes).toISOString();
   }
 }
