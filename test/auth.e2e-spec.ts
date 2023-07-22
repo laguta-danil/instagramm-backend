@@ -105,5 +105,20 @@ describe('Auth (e2e)', () => {
       expect(beforeConfirm.isConfirmed).toBe(false);
       expect(afterConfirm.isConfirmed).toBe(true);
     });
+
+    it("should't email resending if incorrect email", async () => {
+      const [ud0, ud1] = userFabrica.createUserData(2);
+
+      await request(server).post(RegisterUrl).send(ud0);
+
+      const res = await request(server)
+        .post(EmailResendingUrl)
+        .send({ email: ud1.email });
+
+      const errors = errorsData('email');
+
+      expect(res.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(res.body).toEqual(errors);
+    });
   });
 });
