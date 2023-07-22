@@ -6,6 +6,7 @@ import { CreateUserDto } from '../user/dto/create.dto';
 
 import { ApiRegistration } from './auth.swagger';
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
+import { ConfirmRegisterCommand } from './use-case/confirm.register.use-case';
 import { RegisterCommand } from './use-case/registration.use-case';
 
 @ApiTags('Auth')
@@ -23,6 +24,6 @@ export class AuthController {
   @Post('/registration-confirmation')
   @HttpCode(HttpStatus.NO_CONTENT)
   confirmRegister(@Body() dto: ConfirmRegisterDto) {
-    return dto;
+    return this.commandBus.execute(new ConfirmRegisterCommand(dto.code));
   }
 }

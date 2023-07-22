@@ -23,6 +23,13 @@ export class UsersRepo {
     });
   }
 
+  async setConfirmRegister(code: string) {
+    return this.prisma.usersConfirmEmail.update({
+      data: { isConfirmed: true },
+      where: { confirmCode: code }
+    });
+  }
+
   async checkUserByEmailOrLogin(emailOrLogin: string) {
     return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }

@@ -9,6 +9,7 @@ import { UsersRepo } from '../user/repositories/user.repo';
 
 import { AuthController } from './auth.controller';
 import { JwtService } from './jwt.service';
+import { ConfirmRegisterUseCase } from './use-case/confirm.register.use-case';
 import { RegisterUseCase } from './use-case/registration.use-case';
 
 @Module({
@@ -21,6 +22,7 @@ import { RegisterUseCase } from './use-case/registration.use-case';
     UsersRepo,
     // use-case
     RegisterUseCase,
+    ConfirmRegisterUseCase,
     // validation
     ExistUserByLoginOrEmail,
     IsValidConfirmCode
