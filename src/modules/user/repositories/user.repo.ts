@@ -30,6 +30,13 @@ export class UsersRepo {
     });
   }
 
+  async getConfirmEmailInfoByEmail(email: string) {
+    return this.prisma.usersConfirmEmail.findFirst({
+      select: { experationDate: true, isConfirmed: true },
+      where: { user: { email } }
+    });
+  }
+
   async checkUserByEmailOrLogin(emailOrLogin: string) {
     return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
