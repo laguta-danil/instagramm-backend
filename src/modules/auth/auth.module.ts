@@ -4,13 +4,16 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { PrismaService } from '../../database/prisma.service';
 import { IsValidConfirmCode } from '../../infra/decorator/auth/is.valid.confirm.code';
+import { IsValidResendingCode } from '../../infra/decorator/auth/is.valid.resending.code';
 import { ExistUserByLoginOrEmail } from '../../infra/decorator/user/exist.user.by.login-email';
+import { EmailService } from '../email/email.service';
 import { UsersRepo } from '../user/repositories/user.repo';
 
 import { AuthController } from './auth.controller';
 import { JwtService } from './jwt.service';
 import { ConfirmRegisterUseCase } from './use-case/confirm.register.use-case';
 import { RegisterUseCase } from './use-case/registration.use-case';
+import { ResendingUseCase } from './use-case/resending.use-case';
 
 @Module({
   controllers: [AuthController],
@@ -19,13 +22,16 @@ import { RegisterUseCase } from './use-case/registration.use-case';
     // service
     PrismaService,
     JwtService,
+    EmailService,
     UsersRepo,
     // use-case
     RegisterUseCase,
     ConfirmRegisterUseCase,
+    ResendingUseCase,
     // validation
     ExistUserByLoginOrEmail,
-    IsValidConfirmCode
+    IsValidConfirmCode,
+    IsValidResendingCode
   ]
 })
 export class AuthModule {}

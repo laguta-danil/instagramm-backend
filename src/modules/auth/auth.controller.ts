@@ -6,9 +6,10 @@ import { CreateUserDto } from '../user/dto/create.dto';
 
 import { ApiConfirmRegistration, ApiRegistration } from './auth.swagger';
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
-import { EmailResendingDto } from './dto/email.resending.dto';
+import { ResendingDto } from './dto/email.resending.dto';
 import { ConfirmRegisterCommand } from './use-case/confirm.register.use-case';
 import { RegisterCommand } from './use-case/registration.use-case';
+import { ResendingCommand } from './use-case/resending.use-case';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -31,7 +32,7 @@ export class AuthController {
 
   @Post('/registration-email-resending')
   @HttpCode(HttpStatus.NO_CONTENT)
-  emailResending(@Body() dto: EmailResendingDto) {
-    return dto;
+  emailResending(@Body() dto: ResendingDto) {
+    return this.commandBus.execute(new ResendingCommand(dto.email));
   }
 }
