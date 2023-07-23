@@ -12,6 +12,7 @@ import { UsersRepo } from '../user/repositories/user.repo';
 import { AuthController } from './auth.controller';
 import { JwtService } from './jwt.service';
 import { ConfirmRegisterUseCase } from './use-case/confirm.register.use-case';
+import { PasswordRecoveryUseCase } from './use-case/password.recovery.use-case';
 import { RegisterUseCase } from './use-case/registration.use-case';
 import { ResendingUseCase } from './use-case/resending.use-case';
 
@@ -28,6 +29,7 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     RegisterUseCase,
     ConfirmRegisterUseCase,
     ResendingUseCase,
+    PasswordRecoveryUseCase,
     // validation
     ExistUserByLoginOrEmail,
     IsValidConfirmCode,

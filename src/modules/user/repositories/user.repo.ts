@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../../database/prisma.service';
 import { ResendingDbDto } from '../../auth/dto/email.resending.dto';
+import { PasswordRecoveryDbDto } from '../../auth/dto/password.recovery.dto';
 import { RegisterDbDto } from '../../auth/dto/register.dto';
 import { CreateUserDbDto } from '../dto/create.dto';
 
@@ -56,9 +57,23 @@ export class UsersRepo {
     });
   }
 
+  async setRecoveryPassInfo(dto: PasswordRecoveryDbDto) {
+    const { userId, recoveryCode, expirationDate } = dto;
+
+    return this.prisma.passwordRecovery.upsert({
+      create: dto,
+      update: { expirationDate, isConfirmed: false, recoveryCode },
+      where: { userId }
+    });
+  }
+
   async checkUserByEmailOrLogin(emailOrLogin: string) {
     return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
     });
+  }
+
+  async checkUserByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
   }
 }

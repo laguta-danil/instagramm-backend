@@ -13,6 +13,7 @@ import { ConfirmRegisterDto } from './dto/confirm.register.dto';
 import { ResendingDto } from './dto/email.resending.dto';
 import { PasswordRecoveryDto } from './dto/password.recovery.dto';
 import { ConfirmRegisterCommand } from './use-case/confirm.register.use-case';
+import { PasswordRecoveryCommand } from './use-case/password.recovery.use-case';
 import { RegisterCommand } from './use-case/registration.use-case';
 import { ResendingCommand } from './use-case/resending.use-case';
 
@@ -45,7 +46,6 @@ export class AuthController {
   @Post('/password-recovery')
   @HttpCode(HttpStatus.NO_CONTENT)
   recoveryPassword(@Body() dto: PasswordRecoveryDto) {
-    // return this.commandBus.execute(new PasswordRecoveryCommand(dto.email));
-    return dto;
+    return this.commandBus.execute(new PasswordRecoveryCommand(dto.email));
   }
 }
