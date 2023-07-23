@@ -20,9 +20,9 @@ export class IsValidConfirmCode implements ValidatorConstraintInterface {
       return false;
     } // user has already been verified
 
-    if (emailInfo.experationDate < new Date()) {
+    if (emailInfo.expirationDate < new Date()) {
       return false;
-    } // invalid experationDate
+    } // invalid expirationDate
 
     return true;
   }

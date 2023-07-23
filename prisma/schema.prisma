@@ -37,7 +37,7 @@ model UsersConfirmEmail {
 model PasswordRecovery {
   id             String   @id @default(uuid())
   recoveryCode   String   @unique @map("recovery_code")
-  experationDate DateTime @map("expr_date")
+  expirationDate DateTime @map("expr_date")
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String   @unique @map("user_id")
 
