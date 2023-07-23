@@ -1,9 +1,12 @@
+import bcrypt from 'bcrypt';
 import request from 'supertest';
 
 import { HttpStatus } from '@nestjs/common';
 import {
   ConfirmRegisterUrl,
   EmailResendingUrl,
+  NewPasswordUrl,
+  PasswordRecoveryUrl,
   RegisterUrl
 } from './helper/endpoints';
 import { errorsData } from './helper/errors.data';
@@ -119,6 +122,44 @@ describe('Auth (e2e)', () => {
 
       expect(res.status).toBe(HttpStatus.BAD_REQUEST);
       expect(res.body).toEqual(errors);
+    });
+  });
+
+  describe('password recovery', () => {
+    it('should be password recovery', async () => {
+      const [ud0] = userFabrica.createUserData(1);
+
+      await request(server).post(RegisterUrl).send(ud0);
+
+      const res = await request(server)
+        .post(PasswordRecoveryUrl)
+        .send(ud0.email);
+
+      const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
+        ud0.email
+      );
+
+      const beforeRecovery = await userFabrica.getUserByEmail(ud0.email);
+
+      const newPassword = 'newPass123';
+
+      const passRes = await request(server)
+        .post(NewPasswordUrl)
+        .send({ newPassword, recoveryCode });
+
+      const afterRecovery = await userFabrica.getUserByEmail(ud0.email);
+
+      const isSuccessRecovery = await bcrypt.compare(
+        newPassword,
+        afterRecovery.passwordHash
+      );
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(passRes.status).toBe(HttpStatus.NO_CONTENT);
+      expect(beforeRecovery.passwordHash).not.toEqual(
+        afterRecovery.passwordHash
+      );
+      expect(isSuccessRecovery).toBe(true);
     });
   });
 });
