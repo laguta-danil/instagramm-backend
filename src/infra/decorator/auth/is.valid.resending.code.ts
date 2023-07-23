@@ -20,9 +20,9 @@ export class IsValidResendingCode implements ValidatorConstraintInterface {
       return false;
     } // user has already been verified
 
-    if (emailInfo.expirationDate < new Date()) {
+    if (emailInfo.experationDate < new Date()) {
       return false;
-    } // invalid expirationDate
+    } // invalid experationDate
 
     return true;
   }
