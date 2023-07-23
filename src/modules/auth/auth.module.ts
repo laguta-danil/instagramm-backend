@@ -4,6 +4,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { PrismaService } from '../../database/prisma.service';
 import { IsValidConfirmCode } from '../../infra/decorator/auth/is.valid.confirm.code';
+import { IsValidRecoveryCode } from '../../infra/decorator/auth/is.valid.recovery.code';
 import { IsValidResendingCode } from '../../infra/decorator/auth/is.valid.resending.code';
 import { ExistUserByLoginOrEmail } from '../../infra/decorator/user/exist.user.by.login-email';
 import { EmailService } from '../email/email.service';
@@ -12,6 +13,7 @@ import { UsersRepo } from '../user/repositories/user.repo';
 import { AuthController } from './auth.controller';
 import { JwtService } from './jwt.service';
 import { ConfirmRegisterUseCase } from './use-case/confirm.register.use-case';
+import { NewPasswordUseCase } from './use-case/new.password.use-case';
 import { PasswordRecoveryUseCase } from './use-case/password.recovery.use-case';
 import { RegisterUseCase } from './use-case/registration.use-case';
 import { ResendingUseCase } from './use-case/resending.use-case';
@@ -30,10 +32,12 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     ConfirmRegisterUseCase,
     ResendingUseCase,
     PasswordRecoveryUseCase,
+    NewPasswordUseCase,
     // validation
     ExistUserByLoginOrEmail,
     IsValidConfirmCode,
-    IsValidResendingCode
+    IsValidResendingCode,
+    IsValidRecoveryCode
   ]
 })
 export class AuthModule {}
