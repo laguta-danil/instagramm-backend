@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import request from 'supertest';
 
 import { HttpStatus } from '@nestjs/common';
+import { PrismaService } from '../src/database/prisma.service';
+import { deleteAllData } from './helper/delete.all.data';
 import {
   ConfirmRegisterUrl,
   EmailResendingUrl,
@@ -16,13 +18,19 @@ import { myBeforeAll } from './helper/my.before.all';
 describe('Auth (e2e)', () => {
   let server: any;
   let userFabrica: UserFabrica;
+  let prisma: PrismaService;
 
   beforeAll(async () => {
-    const { myServer, prisma } = await myBeforeAll();
+    const { myServer, prismaService } = await myBeforeAll();
 
     server = myServer;
+    prisma = prismaService;
 
-    userFabrica = new UserFabrica(server, prisma);
+    userFabrica = new UserFabrica(server, prismaService);
+  });
+
+  beforeEach(async () => {
+    await deleteAllData(prisma);
   });
 
   describe('registration', () => {
