@@ -7,16 +7,16 @@ import { Trim } from '../../../infra/decorator/validation/trim';
 export class CreateUserDto {
   @ApiProperty({
     description:
-      'Unique login of the user (3-10 characters). Allowed characters: letters, numbers, underscores, and hyphens',
+      'Unique login of the user (6-30 characters). Allowed characters: letters, numbers, underscores, and hyphens',
     example: 'user',
-    maxLength: 10,
-    minLength: 3,
+    maxLength: 30,
+    minLength: 6,
     pattern: '[a-zA-Z0-9_-]*$',
     uniqueItems: true
   })
   @Validate(ExistUserByLoginOrEmail)
   @Matches('^[a-zA-Z0-9_-]*$')
-  @Length(3, 10)
+  @Length(6, 30)
   @Trim()
   @IsString()
   readonly login: string;
