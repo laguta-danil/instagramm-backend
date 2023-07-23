@@ -6,6 +6,7 @@ import { CreateUserDto } from '../user/dto/create.dto';
 
 import {
   ApiConfirmRegistration,
+  ApiNewPassword,
   ApiPasswordRecovery,
   ApiRegistration,
   ApiResendingRegistration
@@ -55,6 +56,7 @@ export class AuthController {
 
   @Post('/new-password')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiNewPassword()
   newPassword(@Body() dto: NewPasswordDto) {
     return this.commandBus.execute(new NewPasswordCommand(dto));
   }
