@@ -29,11 +29,11 @@ describe('Auth (e2e)', () => {
     userFabrica = new UserFabrica(server, prismaService);
   });
 
-  beforeEach(async () => {
-    await deleteAllData(prisma);
-  });
-
   describe('registration', () => {
+    beforeEach(async () => {
+      await deleteAllData(prisma);
+    });
+
     it('should be send register email', async () => {
       const [ud0] = userFabrica.createUserData(1);
 
@@ -42,8 +42,6 @@ describe('Auth (e2e)', () => {
       const beforeConfirm = await userFabrica.getUsersConfirmEmailByEmail(
         ud0.email
       );
-
-      console.log('TEST', beforeConfirm);
 
       const confirmRes = await request(server)
         .post(ConfirmRegisterUrl)
@@ -85,11 +83,15 @@ describe('Auth (e2e)', () => {
       const errors = errorsData('password', 'email');
 
       expect(res.status).toBe(HttpStatus.BAD_REQUEST);
-      expect(res.body).toEqual(errors);
+      expect(res.body).toStrictEqual(errors);
     });
   });
 
   describe('email resending', () => {
+    beforeEach(async () => {
+      await deleteAllData(prisma);
+    });
+
     it('should be email resending', async () => {
       const [ud0] = userFabrica.createUserData(1);
 
@@ -134,6 +136,10 @@ describe('Auth (e2e)', () => {
   });
 
   describe('password recovery', () => {
+    beforeEach(async () => {
+      await deleteAllData(prisma);
+    });
+
     it('should be password recovery', async () => {
       const [ud0] = userFabrica.createUserData(1);
 
@@ -141,11 +147,11 @@ describe('Auth (e2e)', () => {
 
       const res = await request(server)
         .post(PasswordRecoveryUrl)
-        .send(ud0.email);
+        .send({ email: ud0.email });
 
       const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
         ud0.email
-      );
+      )!;
 
       const beforeRecovery = await userFabrica.getUserByEmail(ud0.email);
 
@@ -175,11 +181,9 @@ describe('Auth (e2e)', () => {
 
       const res = await request(server)
         .post(PasswordRecoveryUrl)
-        .send(ud0.email);
+        .send({ email: ud0.email });
 
-      const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
-        ud0.email
-      );
+      const recoveryCode = await userFabrica.getRecoveryCodeByEmail(ud0.email);
 
       expect(res.status).toBe(HttpStatus.NO_CONTENT);
       expect(recoveryCode).toBeNull();
@@ -192,7 +196,7 @@ describe('Auth (e2e)', () => {
 
       const res = await request(server)
         .post(PasswordRecoveryUrl)
-        .send(ud0.email);
+        .send({ email: ud0.email });
 
       const passRes = await request(server).post(NewPasswordUrl).send({
         newPassword: 'newPass123',
@@ -213,7 +217,7 @@ describe('Auth (e2e)', () => {
 
       const res = await request(server)
         .post(PasswordRecoveryUrl)
-        .send(ud0.email);
+        .send({ email: ud0.email });
 
       const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
         ud0.email
