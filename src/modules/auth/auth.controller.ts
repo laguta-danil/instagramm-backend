@@ -6,6 +6,7 @@ import { CreateUserDto } from '../user/dto/create.dto';
 
 import {
   ApiConfirmRegistration,
+  ApiPasswordRecovery,
   ApiRegistration,
   ApiResendingRegistration
 } from './auth.swagger';
@@ -45,6 +46,7 @@ export class AuthController {
 
   @Post('/password-recovery')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiPasswordRecovery()
   recoveryPassword(@Body() dto: PasswordRecoveryDto) {
     return this.commandBus.execute(new PasswordRecoveryCommand(dto.email));
   }

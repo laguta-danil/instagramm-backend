@@ -11,6 +11,7 @@ import { CreateUserDto } from '../user/dto/create.dto';
 
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
 import { ResendingDto } from './dto/email.resending.dto';
+import { PasswordRecoveryDto } from './dto/password.recovery.dto';
 
 export function ApiRegistration() {
   return applyDecorators(
@@ -43,6 +44,18 @@ export function ApiResendingRegistration() {
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
       description: 'Send resending registration email with code to user',
+      status: HttpStatus.NO_CONTENT
+    })
+  );
+}
+
+export function ApiPasswordRecovery() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Password recovery' }),
+    ApiBody({ type: PasswordRecoveryDto }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Send recovery email with code to user',
       status: HttpStatus.NO_CONTENT
     })
   );
