@@ -14,10 +14,10 @@ import { Trim } from '../../../infra/decorator/validation/trim';
 export class UserDto {
   @ApiProperty({
     description:
-      'Unique login of the user (3-10 characters). Allowed characters: letters, numbers, underscores, and hyphens',
+      'Unique login of the user (6-30 characters). Allowed characters: letters, numbers, underscores, and hyphens',
     example: 'user',
     maxLength: 30,
-    minLength: 3,
+    minLength: 6,
     pattern: '[a-zA-Z0-9_-]*$',
     uniqueItems: true
   })
@@ -30,9 +30,10 @@ export class UserDto {
   @ApiProperty({
     description: 'User password',
     example: 'qwerty123',
+    maxLength: 20,
     minLength: 6
   })
-  @Length(6)
+  @Length(6, 20)
   @Trim()
   @IsString()
   readonly password: string;

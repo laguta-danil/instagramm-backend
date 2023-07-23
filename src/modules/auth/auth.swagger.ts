@@ -7,10 +7,13 @@ import {
 } from '@nestjs/swagger';
 
 import { apiBadRequestResponse } from '../../utils/swagger/api.error.response';
-import { CreateUserDto, UserDto } from '../user/dto/create.dto';
+import { CreateUserDto } from '../user/dto/create.dto';
 
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
 import { LoginDto } from './dto/login.dto';
+import { ResendingDto } from './dto/email.resending.dto';
+import { NewPasswordDto } from './dto/new.password.dto';
+import { PasswordRecoveryDto } from './dto/password.recovery.dto';
 
 export function ApiRegistration() {
   return applyDecorators(
@@ -36,25 +39,49 @@ export function ApiConfirmRegistration() {
   );
 }
 
-export function ApiAuthorization() {
+export function ApiResendingRegistration() {
   return applyDecorators(
     ApiOperation({ summary: 'Resending registration' }),
-    ApiBody({ type: LoginDto }),
+    ApiBody({ type: ResendingDto }),
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
-      description: 'Token send',
+      description: 'Send resending registration email with code to user',
       status: HttpStatus.NO_CONTENT
     })
   );
 }
 
-export function ApiResendingRegistration() {
+export function ApiPasswordRecovery() {
   return applyDecorators(
-    ApiOperation({ summary: 'Authorization' }),
-    ApiBody({ type: UserDto }),
+    ApiOperation({ summary: 'Password recovery' }),
+    ApiBody({ type: PasswordRecoveryDto }),
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
-      description: 'Send resending registration email with code to user',
+      description: 'Send recovery email with code to user',
+      status: HttpStatus.NO_CONTENT
+    })
+  );
+}
+
+export function ApiNewPassword() {
+  return applyDecorators(
+    ApiOperation({ summary: 'New password' }),
+    ApiBody({ type: NewPasswordDto }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Success change password by user',
+      status: HttpStatus.NO_CONTENT
+    })
+  );
+}
+
+export function ApiAuthorization() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Authorization' }),
+    ApiBody({ type: LoginDto }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Token send',
       status: HttpStatus.NO_CONTENT
     })
   );

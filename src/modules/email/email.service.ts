@@ -6,7 +6,11 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { EnvEnum } from '../../utils/env.enum';
 import { EventEnum } from '../../utils/event.enum';
 
-const { MAILER_SUBJECT, FRONTEND_CONFIRM_EMAIL_LINK } = EnvEnum;
+const {
+  MAILER_SUBJECT,
+  FRONTEND_CONFIRM_EMAIL_LINK,
+  FRONTEND_PASSWORD_RECOVERY_LINK
+} = EnvEnum;
 
 @Injectable()
 export class EmailService {
@@ -27,6 +31,30 @@ export class EmailService {
         },
         subject: this.configService.get(MAILER_SUBJECT),
         template: './register',
+        to: email
+      });
+
+      return true;
+    } catch (error) {
+      let message: string;
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      this.logger.error(`Error sending email to ${email}: ${message}`);
+
+      return null;
+    }
+  }
+
+  async sendPasswordRecoveryEmail(email: string, code: string) {
+    try {
+      await this.mailerService.sendMail({
+        context: {
+          code,
+          link: this.configService.get(FRONTEND_PASSWORD_RECOVERY_LINK)
+        },
+        subject: this.configService.get(MAILER_SUBJECT),
+        template: './password-recovery',
         to: email
       });
 

@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 
 import { PrismaService } from '../../database/prisma.service';
 import { IsValidConfirmCode } from '../../infra/decorator/auth/is.valid.confirm.code';
+import { IsValidRecoveryCode } from '../../infra/decorator/auth/is.valid.recovery.code';
 import { IsValidResendingCode } from '../../infra/decorator/auth/is.valid.resending.code';
 import { ExistUserByLoginOrEmail } from '../../infra/decorator/user/exist.user.by.login-email';
 import { JwtStrategy } from '../../infra/strategis/jwt.strategy';
@@ -18,6 +19,8 @@ import { UsersRepo } from '../user/repositories/user.repo';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ConfirmRegisterUseCase } from './use-case/confirm.register.use-case';
+import { NewPasswordUseCase } from './use-case/new.password.use-case';
+import { PasswordRecoveryUseCase } from './use-case/password.recovery.use-case';
 import { AuthStatusUseCase } from './use-case/authStatus.use-case';
 import { RegisterUseCase } from './use-case/registration.use-case';
 import { ResendingUseCase } from './use-case/resending.use-case';
@@ -33,19 +36,22 @@ import { ResendingUseCase } from './use-case/resending.use-case';
   providers: [
     // service
     PrismaService,
+    AuthService,
     EmailService,
-    JwtService,
     AuthService,
     UsersRepo,
     // use-case
     RegisterUseCase,
     ConfirmRegisterUseCase,
     ResendingUseCase,
+    PasswordRecoveryUseCase,
+    NewPasswordUseCase,
     AuthStatusUseCase,
     // validation
     ExistUserByLoginOrEmail,
     IsValidConfirmCode,
     IsValidResendingCode,
+    IsValidRecoveryCode,
     // guards
     LocalStrategy,
     JwtStrategy
