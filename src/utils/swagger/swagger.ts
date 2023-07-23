@@ -1,6 +1,3 @@
-import * as fs from 'fs';
-import * as https from 'https';
-
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
