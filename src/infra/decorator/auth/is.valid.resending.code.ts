@@ -3,28 +3,17 @@ import {
   ValidatorConstraintInterface
 } from 'class-validator';
 
+import { AuthService } from '../../../modules/auth/auth.service';
 import { UsersRepo } from '../../../modules/user/repositories/user.repo';
 
 @ValidatorConstraint({ async: true })
 export class IsValidResendingCode implements ValidatorConstraintInterface {
-  constructor(private usersRepo: UsersRepo) {}
+  constructor(private usersRepo: UsersRepo, private authService: AuthService) {}
 
   async validate(value: string) {
     const emailInfo = await this.usersRepo.getConfirmEmailInfoByEmail(value);
 
-    if (!emailInfo) {
-      return false;
-    }
-
-    if (emailInfo.isConfirmed === true) {
-      return false;
-    } // user has already been verified
-
-    if (emailInfo.experationDate < new Date()) {
-      return false;
-    } // invalid experationDate
-
-    return true;
+    return this.authService.checkAuthCode(emailInfo);
   }
 
   defaultMessage() {

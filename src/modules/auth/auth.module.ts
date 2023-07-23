@@ -11,6 +11,7 @@ import { EmailService } from '../email/email.service';
 import { UsersRepo } from '../user/repositories/user.repo';
 
 import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
 import { JwtService } from './jwt.service';
 import { ConfirmRegisterUseCase } from './use-case/confirm.register.use-case';
 import { NewPasswordUseCase } from './use-case/new.password.use-case';
@@ -25,6 +26,7 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     // service
     PrismaService,
     JwtService,
+    AuthService,
     EmailService,
     UsersRepo,
     // use-case

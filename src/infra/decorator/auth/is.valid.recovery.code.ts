@@ -3,30 +3,19 @@ import {
   ValidatorConstraintInterface
 } from 'class-validator';
 
+import { AuthService } from '../../../modules/auth/auth.service';
 import { UsersRepo } from '../../../modules/user/repositories/user.repo';
 
 @ValidatorConstraint({ async: true })
 export class IsValidRecoveryCode implements ValidatorConstraintInterface {
-  constructor(private usersRepo: UsersRepo) {}
+  constructor(private usersRepo: UsersRepo, private authService: AuthService) {}
 
   async validate(value: string) {
     const recoveryPassInfo = await this.usersRepo.getRecoveryPassInfoByCode(
       value
     );
 
-    if (!recoveryPassInfo) {
-      return false;
-    }
-
-    if (recoveryPassInfo.isConfirmed) {
-      return false;
-    }
-
-    if (recoveryPassInfo.expirationDate < new Date()) {
-      return false;
-    }
-
-    return true;
+    return this.authService.checkAuthCode(recoveryPassInfo);
   }
 
   defaultMessage() {
