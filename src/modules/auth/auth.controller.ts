@@ -6,12 +6,18 @@ import { CreateUserDto } from '../user/dto/create.dto';
 
 import {
   ApiConfirmRegistration,
+  ApiNewPassword,
+  ApiPasswordRecovery,
   ApiRegistration,
   ApiResendingRegistration
 } from './auth.swagger';
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
 import { ResendingDto } from './dto/email.resending.dto';
+import { NewPasswordDto } from './dto/new.password.dto';
+import { PasswordRecoveryDto } from './dto/password.recovery.dto';
 import { ConfirmRegisterCommand } from './use-case/confirm.register.use-case';
+import { NewPasswordCommand } from './use-case/new.password.use-case';
+import { PasswordRecoveryCommand } from './use-case/password.recovery.use-case';
 import { RegisterCommand } from './use-case/registration.use-case';
 import { ResendingCommand } from './use-case/resending.use-case';
 
@@ -39,5 +45,19 @@ export class AuthController {
   @ApiResendingRegistration()
   emailResending(@Body() dto: ResendingDto) {
     return this.commandBus.execute(new ResendingCommand(dto.email));
+  }
+
+  @Post('/password-recovery')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiPasswordRecovery()
+  recoveryPassword(@Body() dto: PasswordRecoveryDto) {
+    return this.commandBus.execute(new PasswordRecoveryCommand(dto.email));
+  }
+
+  @Post('/new-password')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiNewPassword()
+  newPassword(@Body() dto: NewPasswordDto) {
+    return this.commandBus.execute(new NewPasswordCommand(dto));
   }
 }

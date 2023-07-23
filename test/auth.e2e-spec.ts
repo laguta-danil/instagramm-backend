@@ -1,9 +1,14 @@
+import bcrypt from 'bcrypt';
 import request from 'supertest';
 
 import { HttpStatus } from '@nestjs/common';
+import { PrismaService } from '../src/database/prisma.service';
+import { deleteAllData } from './helper/delete.all.data';
 import {
   ConfirmRegisterUrl,
   EmailResendingUrl,
+  NewPasswordUrl,
+  PasswordRecoveryUrl,
   RegisterUrl
 } from './helper/endpoints';
 import { errorsData } from './helper/errors.data';
@@ -13,16 +18,22 @@ import { myBeforeAll } from './helper/my.before.all';
 describe('Auth (e2e)', () => {
   let server: any;
   let userFabrica: UserFabrica;
+  let prisma: PrismaService;
 
   beforeAll(async () => {
-    const { myServer, prisma } = await myBeforeAll();
+    const { myServer, prismaService } = await myBeforeAll();
 
     server = myServer;
+    prisma = prismaService;
 
-    userFabrica = new UserFabrica(server, prisma);
+    userFabrica = new UserFabrica(server, prismaService);
   });
 
   describe('registration', () => {
+    beforeEach(async () => {
+      await deleteAllData(prisma);
+    });
+
     it('should be send register email', async () => {
       const [ud0] = userFabrica.createUserData(1);
 
@@ -31,8 +42,6 @@ describe('Auth (e2e)', () => {
       const beforeConfirm = await userFabrica.getUsersConfirmEmailByEmail(
         ud0.email
       );
-
-      console.log('TEST', beforeConfirm);
 
       const confirmRes = await request(server)
         .post(ConfirmRegisterUrl)
@@ -74,11 +83,15 @@ describe('Auth (e2e)', () => {
       const errors = errorsData('password', 'email');
 
       expect(res.status).toBe(HttpStatus.BAD_REQUEST);
-      expect(res.body).toEqual(errors);
+      expect(res.body).toStrictEqual(errors);
     });
   });
 
   describe('email resending', () => {
+    beforeEach(async () => {
+      await deleteAllData(prisma);
+    });
+
     it('should be email resending', async () => {
       const [ud0] = userFabrica.createUserData(1);
 
@@ -119,6 +132,107 @@ describe('Auth (e2e)', () => {
 
       expect(res.status).toBe(HttpStatus.BAD_REQUEST);
       expect(res.body).toEqual(errors);
+    });
+  });
+
+  describe('password recovery', () => {
+    beforeEach(async () => {
+      await deleteAllData(prisma);
+    });
+
+    it('should be password recovery', async () => {
+      const [ud0] = userFabrica.createUserData(1);
+
+      await request(server).post(RegisterUrl).send(ud0);
+
+      const res = await request(server)
+        .post(PasswordRecoveryUrl)
+        .send({ email: ud0.email });
+
+      const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
+        ud0.email
+      )!;
+
+      const beforeRecovery = await userFabrica.getUserByEmail(ud0.email);
+
+      const newPassword = 'newPass123';
+
+      const passRes = await request(server)
+        .post(NewPasswordUrl)
+        .send({ newPassword, recoveryCode });
+
+      const afterRecovery = await userFabrica.getUserByEmail(ud0.email);
+
+      const isSuccessRecovery = await bcrypt.compare(
+        newPassword,
+        afterRecovery.passwordHash
+      );
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(passRes.status).toBe(HttpStatus.NO_CONTENT);
+      expect(beforeRecovery.passwordHash).not.toEqual(
+        afterRecovery.passwordHash
+      );
+      expect(isSuccessRecovery).toBe(true);
+    });
+
+    it("shouldn't password recovery if user email no register", async () => {
+      const [ud0] = userFabrica.createUserData(1);
+
+      const res = await request(server)
+        .post(PasswordRecoveryUrl)
+        .send({ email: ud0.email });
+
+      const recoveryCode = await userFabrica.getRecoveryCodeByEmail(ud0.email);
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(recoveryCode).toBeNull();
+    });
+
+    it("shouldn't password recovery if incorrect code", async () => {
+      const [ud0] = userFabrica.createUserData(1);
+
+      await request(server).post(RegisterUrl).send(ud0);
+
+      const res = await request(server)
+        .post(PasswordRecoveryUrl)
+        .send({ email: ud0.email });
+
+      const passRes = await request(server).post(NewPasswordUrl).send({
+        newPassword: 'newPass123',
+        recoveryCode: IncorrectUuid
+      });
+
+      const errors = errorsData('recoveryCode');
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(passRes.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(passRes.body).toEqual(errors);
+    });
+
+    it("shouldn't password recovery with incorrect password", async () => {
+      const [ud0] = userFabrica.createUserData(1);
+
+      await request(server).post(RegisterUrl).send(ud0);
+
+      const res = await request(server)
+        .post(PasswordRecoveryUrl)
+        .send({ email: ud0.email });
+
+      const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
+        ud0.email
+      );
+
+      const passRes = await request(server).post(NewPasswordUrl).send({
+        newPassword: 'q',
+        recoveryCode
+      });
+
+      const errors = errorsData('newPassword');
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(passRes.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(passRes.body).toEqual(errors);
     });
   });
 });

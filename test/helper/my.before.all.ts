@@ -4,7 +4,6 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../../src/app.module';
 import { PrismaService } from '../../src/database/prisma.service';
 import { initApp } from '../../src/utils/init.app';
-import { deleteAllData } from './delete.all.data';
 
 export const myBeforeAll = async () => {
   let app: INestApplication;
@@ -20,7 +19,5 @@ export const myBeforeAll = async () => {
 
   const prisma = app.get(PrismaService);
 
-  await deleteAllData(prisma);
-
-  return { myServer: server, prisma };
+  return { myServer: server, prismaService: prisma };
 };

@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../../database/prisma.service';
 import { ResendingDbDto } from '../../auth/dto/email.resending.dto';
+import { NewPasswordDbDto } from '../../auth/dto/new.password.dto';
+import { PasswordRecoveryDbDto } from '../../auth/dto/password.recovery.dto';
 import { RegisterDbDto } from '../../auth/dto/register.dto';
 import { CreateUserDbDto } from '../dto/create.dto';
 
@@ -56,9 +58,56 @@ export class UsersRepo {
     });
   }
 
+  async setRecoveryPassInfo(dto: PasswordRecoveryDbDto) {
+    const { userId, recoveryCode, expirationDate } = dto;
+
+    return this.prisma.passwordRecovery.upsert({
+      create: dto,
+      update: { expirationDate, isConfirmed: false, recoveryCode },
+      where: { userId }
+    });
+  }
+
+  async getRecoveryPassInfoByCode(code: string) {
+    return this.prisma.passwordRecovery.findUnique({
+      where: { recoveryCode: code }
+    });
+  }
+
+  async setNewPass(dto: NewPasswordDbDto) {
+    const { newPasswordHash, recoveryCode } = dto;
+
+    const recoveryInfo = await this.prisma.passwordRecovery.findUnique({
+      select: { userId: true },
+      where: { recoveryCode }
+    });
+
+    if (!recoveryInfo) {
+      throw new Error('Password recovery not found'); // this shouldn't happen, just the manners of a prisma
+    }
+
+    return this.prisma.$transaction(
+      [
+        this.prisma.passwordRecovery.update({
+          data: { isConfirmed: true },
+          where: { userId: recoveryInfo.userId }
+        }),
+        this.prisma.user.update({
+          data: { passwordHash: newPasswordHash },
+          where: { id: recoveryInfo.userId }
+        })
+      ],
+      { isolationLevel: 'Serializable' }
+    );
+  }
+
   async checkUserByEmailOrLogin(emailOrLogin: string) {
     return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
     });
+  }
+
+  async checkUserByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
   }
 }

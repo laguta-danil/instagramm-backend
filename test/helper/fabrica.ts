@@ -29,9 +29,20 @@ export class UserFabrica {
     return userData;
   }
 
+  async getUserByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
   async getUsersConfirmEmailByEmail(email: string) {
     return this.prisma.usersConfirmEmail.findFirst({
       select: { confirmCode: true, isConfirmed: true },
+      where: { user: { email } }
+    });
+  }
+
+  async getRecoveryCodeByEmail(email: string) {
+    return this.prisma.passwordRecovery.findFirst({
+      select: { recoveryCode: true },
       where: { user: { email } }
     });
   }
