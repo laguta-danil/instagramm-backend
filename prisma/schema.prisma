@@ -18,6 +18,7 @@ model User {
   createdAt         DateTime           @default(now()) @map("created_at")
   updatedAt         DateTime           @default(now()) @updatedAt @map("updated_at")
   usersConfirmEmail UsersConfirmEmail?
+  PasswordRecovery  PasswordRecovery?
 
   @@map("user")
 }
@@ -31,4 +32,14 @@ model UsersConfirmEmail {
   userId         String   @unique @map("user_id")
 
   @@map("users_confirm_email")
+}
+
+model PasswordRecovery {
+  id             String   @id @default(uuid())
+  recoveryCode   String   @unique @map("recovery_code")
+  experationDate DateTime @map("expr_date")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String   @unique @map("user_id")
+
+  @@map("users_password_recovery")
 }
