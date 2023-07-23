@@ -161,5 +161,20 @@ describe('Auth (e2e)', () => {
       );
       expect(isSuccessRecovery).toBe(true);
     });
+
+    it("shouldn't password recovery if user email no register", async () => {
+      const [ud0] = userFabrica.createUserData(1);
+
+      const res = await request(server)
+        .post(PasswordRecoveryUrl)
+        .send(ud0.email);
+
+      const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
+        ud0.email
+      );
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(recoveryCode).toBeNull();
+    });
   });
 });
