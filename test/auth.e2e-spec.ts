@@ -205,5 +205,30 @@ describe('Auth (e2e)', () => {
       expect(passRes.status).toBe(HttpStatus.BAD_REQUEST);
       expect(passRes.body).toEqual(errors);
     });
+
+    it("shouldn't password recovery with incorrect password", async () => {
+      const [ud0] = userFabrica.createUserData(1);
+
+      await request(server).post(RegisterUrl).send(ud0);
+
+      const res = await request(server)
+        .post(PasswordRecoveryUrl)
+        .send(ud0.email);
+
+      const { recoveryCode } = await userFabrica.getRecoveryCodeByEmail(
+        ud0.email
+      );
+
+      const passRes = await request(server).post(NewPasswordUrl).send({
+        newPassword: 'q',
+        recoveryCode
+      });
+
+      const errors = errorsData('newPassword');
+
+      expect(res.status).toBe(HttpStatus.NO_CONTENT);
+      expect(passRes.status).toBe(HttpStatus.BAD_REQUEST);
+      expect(passRes.body).toEqual(errors);
+    });
   });
 });
