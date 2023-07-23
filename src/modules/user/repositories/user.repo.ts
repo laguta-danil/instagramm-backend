@@ -67,6 +67,12 @@ export class UsersRepo {
     });
   }
 
+  async getRecoveryPassInfoByCode(code: string) {
+    return this.prisma.passwordRecovery.findUnique({
+      where: { recoveryCode: code }
+    });
+  }
+
   async checkUserByEmailOrLogin(emailOrLogin: string) {
     return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
