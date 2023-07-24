@@ -73,11 +73,11 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async login(@Req() req, @Res() res) {
-    const cookie = this.authService.getCookieWithJwtToken(req.user.id);
-    console.log(cookie);
+    const cookie = await this.authService.getCookieWithJwtToken(req.user.id);
+
     res.cookie('Authorization', cookie, { httpOnly: true });
 
-    return res.json({ status: 'Success' });
+    return res.json({ cookie: cookie, status: 'Success' });
   }
 
   @Post('/logout')
