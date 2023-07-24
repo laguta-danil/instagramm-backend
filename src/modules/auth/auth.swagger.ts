@@ -7,10 +7,10 @@ import {
 } from '@nestjs/swagger';
 
 import { apiBadRequestResponse } from '../../utils/swagger/api.error.response';
-import { CreateUserDto } from '../user/dto/create.dto';
+import { CreateUserDto, UserDto } from '../user/dto/create.dto';
 
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
-import { ResendingDto } from './dto/email.resending.dto';
+import { LoginDto } from './dto/login.dto';
 
 export function ApiRegistration() {
   return applyDecorators(
@@ -36,10 +36,22 @@ export function ApiConfirmRegistration() {
   );
 }
 
-export function ApiResendingRegistration() {
+export function ApiAuthorization() {
   return applyDecorators(
     ApiOperation({ summary: 'Resending registration' }),
-    ApiBody({ type: ResendingDto }),
+    ApiBody({ type: LoginDto }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Token send',
+      status: HttpStatus.NO_CONTENT
+    })
+  );
+}
+
+export function ApiResendingRegistration() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Authorization' }),
+    ApiBody({ type: UserDto }),
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
       description: 'Send resending registration email with code to user',

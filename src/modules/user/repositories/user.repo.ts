@@ -14,7 +14,6 @@ export class UsersRepo {
   }
 
   async registerUser(dto: RegisterDbDto) {
-    // @ts-ignore
     return this.prisma.usersConfirmEmail.create({ data: dto });
   }
 
@@ -59,7 +58,14 @@ export class UsersRepo {
 
   async checkUserByEmailOrLogin(emailOrLogin: string) {
     return this.prisma.user.findFirst({
+      select: { email: true, id: true, login: true, passwordHash: true },
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
+    });
+  }
+
+  async findById(id: string) {
+    return this.prisma.user.findFirst({
+      where: { id }
     });
   }
 }
