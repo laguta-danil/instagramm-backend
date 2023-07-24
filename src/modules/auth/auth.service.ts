@@ -1,5 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { ApiJwtService } from '../jwt/apiJwt.services';
@@ -15,8 +14,7 @@ export class AuthService {
   constructor(
     private usersRepo: UsersRepo,
     private jwtService: ApiJwtService
-  ) {
-  }
+  ) {}
 
   public async validateUser(email: string, password: string) {
     const user = await this.usersRepo.checkUserByEmailOrLogin(email);
