@@ -1,10 +1,28 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
-import { ApiTags } from '@nestjs/swagger';
-
-import { CreateUserDto } from '../user/dto/create.dto';
-
 import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  Res,
+  UseGuards
+} from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
+import { JwtService } from '@nestjs/jwt';
+import { ApiTags } from '@nestjs/swagger';
+import { Request, Response } from 'express';
+
+import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
+import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
+import { RefreshAuthGuard } from '../../infra/guards/refresh-auth.guard';
+import { CreateUserDto } from '../user/dto/create.dto';
+import { UsersRepo } from '../user/repositories/user.repo';
+
+import { AuthService } from './auth.service';
+import {
+  ApiAuthorization,
   ApiConfirmRegistration,
   ApiNewPassword,
   ApiPasswordRecovery,
@@ -24,7 +42,10 @@ import { ResendingCommand } from './use-case/resending.use-case';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly commandBus: CommandBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly authService: AuthService
+  ) {}
 
   @Post('/registration')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -59,5 +80,30 @@ export class AuthController {
   @ApiNewPassword()
   newPassword(@Body() dto: NewPasswordDto) {
     return this.commandBus.execute(new NewPasswordCommand(dto));
+  }
+
+  @UseGuards(RefreshAuthGuard)
+  @Get('/refresh-token')
+  async refreshTokens(@Req() req, @Res({ passthrough: true }) res) {
+    const newAuthToken = await this.authService.refreshAccessToken(req);
+    res.cookie('Authorization', newAuthToken, { httpOnly: true });
+    res.status(200).send({ message: 'Success' });
+  }
+
+  @Post('/login')
+  @ApiAuthorization()
+  @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async login(@Req() req, @Res() res) {
+    const authToken = await this.authService.login(req.user);
+    res.cookie('Authorization', authToken, { httpOnly: true });
+    res.status(200).send({ message: 'Success' });
+  }
+
+  @Post('/logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logout(@Res() res) {
+    res.cookie('Authorization', null, { httpOnly: true });
+    res.sendStatus(200);
   }
 }
