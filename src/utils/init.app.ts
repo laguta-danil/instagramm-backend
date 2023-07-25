@@ -7,6 +7,15 @@ import { HttpExceptionFilter } from '../infra/exception-filter/http.exception.fi
 import { GlobalValidationPipe } from '../infra/pipe/global.validation.pipe';
 
 export const initApp = (app: INestApplication): INestApplication => {
+  app.enableCors({
+    allowedHeaders: ['Accept', 'Content-Type'],
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    optionsSuccessStatus: 204,
+    origin: ['*'],
+    preflightContinue: false
+  });
+
   app.useGlobalPipes(GlobalValidationPipe);
 
   app.useGlobalFilters(new HttpExceptionFilter());
