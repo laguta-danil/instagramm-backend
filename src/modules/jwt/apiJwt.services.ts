@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { EnvEnum } from '../../utils/env.enum';
 
-const { JWT_SECRET, JWT_EXPIRATION_TIME } = EnvEnum;
+const { JWT_REFRESH_TOKEN_EXPIRATION_TIME, JWT_REFRESH_TOKEN_SECRET } = EnvEnum;
 
 @Injectable()
 export class ApiJwtService {
@@ -13,14 +13,11 @@ export class ApiJwtService {
     private configService: ConfigService
   ) {}
 
-  /**
-   * Create JWT tokens
-   * @param userId
-   * @param deviceId
-   */
   async createJWT(id) {
-    const secretRT = this.configService.get<string>(JWT_SECRET);
-    const expiresInRT = this.configService.get<string>(JWT_EXPIRATION_TIME);
+    const secretRT = this.configService.get<string>(JWT_REFRESH_TOKEN_SECRET);
+    const expiresInRT = this.configService.get<string>(
+      JWT_REFRESH_TOKEN_EXPIRATION_TIME
+    );
 
     const accessToken = this.jwtService.sign({ id });
     const refreshToken = this.jwtService.sign(
@@ -31,32 +28,9 @@ export class ApiJwtService {
     return { accessToken, refreshToken };
   }
 
-  /**
-   * Get data from access token
-   * @param refreshToken
-   */
-  async getRefreshTokenData(refreshToken: string): Promise<any | null> {
-    try {
-      // const secretRT = this.apiConfigService.REFRESH_TOKEN_SECRET;
-      return this.jwtService.verify(refreshToken, {
-        secret: this.configService.get<string>(JWT_SECRET)
-      });
-    } catch (e) {
-      return null;
-    }
-  }
+  async getNewAccessToken(id: string, refreshToken: string) {
+    const accessToken = this.jwtService.sign({ id });
 
-  /**
-   * Get user id from access token
-   * @param accessToken
-   */
-  async getUserIdByAccessToken(accessToken: string): Promise<number | null> {
-    try {
-      const result = this.jwtService.verify(accessToken);
-
-      return result.userId;
-    } catch (e) {
-      return null;
-    }
+    return { accessToken, refreshToken };
   }
 }

@@ -77,3 +77,10 @@ export class CreateUserDbDto {
   readonly login: string;
   readonly passwordHash: string;
 }
+
+export class UserInDb extends CreateUserDbDto {
+  readonly id: string;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+  readonly refreshToken: string;
+}

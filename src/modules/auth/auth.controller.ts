@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -9,11 +10,15 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
+import { JwtService } from '@nestjs/jwt';
 import { ApiTags } from '@nestjs/swagger';
+import { Request, Response } from 'express';
 
 import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
+import { RefreshAuthGuard } from '../../infra/guards/refresh-auth.guard';
 import { CreateUserDto } from '../user/dto/create.dto';
+import { UsersRepo } from '../user/repositories/user.repo';
 
 import { AuthService } from './auth.service';
 import {
@@ -77,24 +82,28 @@ export class AuthController {
     return this.commandBus.execute(new NewPasswordCommand(dto));
   }
 
+  @UseGuards(RefreshAuthGuard)
+  @Get('/refresh-token')
+  async refreshTokens(@Req() req, @Res({ passthrough: true }) res) {
+    const newAuthToken = await this.authService.refreshAccessToken(req);
+    res.cookie('Authorization', newAuthToken, { httpOnly: true });
+    res.status(200).send({ message: 'Success' });
+  }
+
   @Post('/login')
   @ApiAuthorization()
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async login(@Req() req, @Res() res) {
-    const cookie = await this.authService.getCookieWithJwtToken(req.user.id);
-
-    res.cookie('Authorization', cookie, { httpOnly: true });
-
-    return res.json({ cookie: cookie, status: 'Success' });
+    const authToken = await this.authService.login(req.user);
+    res.cookie('Authorization', authToken, { httpOnly: true });
+    res.status(200).send({ message: 'Success' });
   }
 
   @Post('/logout')
-  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(@Req() req, @Res() res) {
+  async logout(@Res() res) {
     res.cookie('Authorization', null, { httpOnly: true });
-
-    return res.sendStatus(200);
+    res.sendStatus(200);
   }
 }

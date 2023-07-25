@@ -66,7 +66,7 @@ export class UsersRepo {
     });
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<any> {
     return this.prisma.user.findFirst({
       where: { id }
     });
@@ -117,5 +117,17 @@ export class UsersRepo {
 
   async checkUserByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  async updateUser(id: string, hashedToken: string) {
+    try {
+      return this.prisma.user.update({
+        // @ts-ignore
+        data: { refreshToken: hashedToken },
+        where: { id }
+      });
+    } catch (error) {
+      return error;
+    }
   }
 }

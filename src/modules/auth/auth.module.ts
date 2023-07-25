@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 import { PrismaService } from '../../database/prisma.service';
@@ -8,6 +9,7 @@ import { IsValidConfirmCode } from '../../infra/decorator/auth/is.valid.confirm.
 import { IsValidRecoveryCode } from '../../infra/decorator/auth/is.valid.recovery.code';
 import { IsValidResendingCode } from '../../infra/decorator/auth/is.valid.resending.code';
 import { ExistUserByLoginOrEmail } from '../../infra/decorator/user/exist.user.by.login-email';
+import { RefreshTokenStrategy } from '../../infra/strategis/jwt-refresh.strategy';
 import { JwtStrategy } from '../../infra/strategis/jwt.strategy';
 import { LocalStrategy } from '../../infra/strategis/local.strategy';
 import { ApiJwtModule } from '../jwt/apiJwt.module';
@@ -34,6 +36,7 @@ import { ResendingUseCase } from './use-case/resending.use-case';
   providers: [
     // service
     PrismaService,
+    JwtService,
     AuthService,
     EmailService,
     AuthService,
@@ -52,7 +55,8 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     IsValidRecoveryCode,
     // guards
     LocalStrategy,
-    JwtStrategy
+    JwtStrategy,
+    RefreshTokenStrategy
   ]
 })
 export class AuthModule {}

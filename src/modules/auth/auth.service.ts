@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { ApiJwtService } from '../jwt/apiJwt.services';
+import { AuthTokenDto } from '../jwt/dto/auth.dto';
+import { UserDto } from '../user/dto/create.dto';
 import { UsersRepo } from '../user/repositories/user.repo';
 
 interface Info {
@@ -13,7 +15,7 @@ interface Info {
 export class AuthService {
   constructor(
     private usersRepo: UsersRepo,
-    private jwtService: ApiJwtService
+    private apiJwtService: ApiJwtService
   ) {}
 
   public async validateUser(email: string, password: string) {
@@ -36,8 +38,45 @@ export class AuthService {
     return !!isPasswordMatching;
   }
 
-  public getCookieWithJwtToken(id: number) {
-    return this.jwtService.createJWT({ id });
+  public getJwtTokens(id: string) {
+    return this.apiJwtService.createJWT(id);
+  }
+
+  private async updateRefreshTokenInUserRep(
+    userId: string,
+    refreshToken: string
+  ) {
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.usersRepo.updateUser(userId, hashedRefreshToken);
+  }
+
+  async login(user): Promise<AuthTokenDto> {
+    const foundUser = await this.usersRepo.findById(user.id);
+    if (foundUser) {
+      const tokens = await this.getJwtTokens(user.id);
+      await this.updateRefreshTokenInUserRep(user.id, tokens.refreshToken);
+
+      return tokens;
+    }
+
+    throw new HttpException(
+      { message: 'Wrong credentials provided' },
+      HttpStatus.BAD_REQUEST
+    );
+  }
+
+  async refreshAccessToken(req) {
+    const id = req.user.userId;
+    const refreshToken = req.cookies.Authorization.refreshToken;
+    const user = await this.usersRepo.findById(id);
+
+    if (await bcrypt.compare(refreshToken, user.refreshToken)) {
+      return this.apiJwtService.getNewAccessToken(user.id, refreshToken);
+    }
+    throw new HttpException(
+      { message: 'Refresh token expired' },
+      HttpStatus.BAD_REQUEST
+    );
   }
 
   public checkAuthCode(info: Info) {
