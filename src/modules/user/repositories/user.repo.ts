@@ -21,7 +21,7 @@ export class UsersRepo {
 
   async getConfirmEmailInfoByCode(code: string) {
     return this.prisma.usersConfirmEmail.findUnique({
-      select: { experationDate: true, isConfirmed: true },
+      select: { expirationDate: true, isConfirmed: true },
       where: { confirmCode: code }
     });
   }
@@ -35,7 +35,7 @@ export class UsersRepo {
 
   async getConfirmEmailInfoByEmail(email: string) {
     return this.prisma.usersConfirmEmail.findFirst({
-      select: { experationDate: true, isConfirmed: true },
+      select: { expirationDate: true, isConfirmed: true },
       where: { user: { email } }
     });
   }
@@ -53,7 +53,7 @@ export class UsersRepo {
     }
 
     return this.prisma.usersConfirmEmail.update({
-      data: { confirmCode: newCode, experationDate: newExpDate },
+      data: { confirmCode: newCode, expirationDate: newExpDate },
       where: { userId: user.id }
     });
   }
@@ -105,9 +105,5 @@ export class UsersRepo {
     return this.prisma.user.findFirst({
       where: { OR: [{ email: emailOrLogin }, { login: emailOrLogin }] }
     });
-  }
-
-  async checkUserByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
   }
 }

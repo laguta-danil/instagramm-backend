@@ -20,7 +20,7 @@ export class PasswordRecoveryUseCase
   ) {}
 
   async execute({ email }: PasswordRecoveryCommand) {
-    const user = await this.usersRepo.checkUserByEmail(email);
+    const user = await this.usersRepo.checkUserByEmailOrLogin(email);
 
     if (!user) {
       return;

@@ -20,6 +20,6 @@ export class ExistUserByLoginOrEmail implements ValidatorConstraintInterface {
   }
 
   defaultMessage() {
-    return 'Incorrect login or email';
+    return 'This user already exists';
   }
 }
