@@ -3,7 +3,6 @@ import * as bcrypt from 'bcrypt';
 
 import { ApiJwtService } from '../jwt/apiJwt.services';
 import { AuthTokenDto } from '../jwt/dto/auth.dto';
-import { UserDto } from '../user/dto/create.dto';
 import { UsersRepo } from '../user/repositories/user.repo';
 
 interface Info {

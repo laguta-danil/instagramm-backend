@@ -10,15 +10,11 @@ import {
   UseGuards
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { JwtService } from '@nestjs/jwt';
 import { ApiTags } from '@nestjs/swagger';
-import { Request, Response } from 'express';
 
-import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
 import { RefreshAuthGuard } from '../../infra/guards/refresh-auth.guard';
 import { CreateUserDto } from '../user/dto/create.dto';
-import { UsersRepo } from '../user/repositories/user.repo';
 
 import { AuthService } from './auth.service';
 import {

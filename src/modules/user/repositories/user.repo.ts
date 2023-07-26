@@ -16,7 +16,6 @@ export class UsersRepo {
   }
 
   async registerUser(dto: RegisterDbDto) {
-    // @ts-ignore
     return this.prisma.usersConfirmEmail.create({ data: dto });
   }
 
@@ -66,7 +65,7 @@ export class UsersRepo {
     });
   }
 
-  async findById(id: string): Promise<any> {
+  async findById(id: string) {
     return this.prisma.user.findFirst({
       where: { id }
     });
@@ -122,7 +121,6 @@ export class UsersRepo {
   async updateUser(id: string, hashedToken: string) {
     try {
       return this.prisma.user.update({
-        // @ts-ignore
         data: { refreshToken: hashedToken },
         where: { id }
       });
