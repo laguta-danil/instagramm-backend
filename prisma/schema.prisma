@@ -20,6 +20,7 @@ model User {
   refreshToken      String             @default("empty")
   usersConfirmEmail UsersConfirmEmail?
   passwordRecovery  PasswordRecovery?
+  profilePage       ProfilePage?
 
   @@map("user")
 }
@@ -44,4 +45,18 @@ model PasswordRecovery {
   userId         String   @unique @map("user_id")
 
   @@map("users_password_recovery")
+}
+
+model ProfilePage {
+  id                String?             @id @default(uuid())
+  photo             String?             @default("empty")
+  firstName         String?             @default("empty")
+  lastName          String?             @default("empty")
+  birthdayDate      DateTime?           @default(now())
+  city              String?             @default("empty")
+  aboutMe           String?             @default("empty")
+  user              User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String?             @unique @map("user_id")
+
+  @@map("profile_page")
 }

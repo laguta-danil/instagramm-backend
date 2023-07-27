@@ -5,6 +5,7 @@ import { ResendingDbDto } from '../../auth/dto/email.resending.dto';
 import { NewPasswordDbDto } from '../../auth/dto/new.password.dto';
 import { PasswordRecoveryDbDto } from '../../auth/dto/password.recovery.dto';
 import { RegisterDbDto } from '../../auth/dto/register.dto';
+import { CreateProfilePageDto } from '../../profile-page/dto/create-profile-page.dto';
 import { CreateUserDbDto } from '../dto/create.dto';
 
 @Injectable()
@@ -12,11 +13,18 @@ export class UsersRepo {
   constructor(private readonly prisma: PrismaService) {}
 
   async createUser(dto: CreateUserDbDto) {
-    return this.prisma.user.create({ data: dto, select: { id: true } });
+    return this.prisma.user.create({
+      data: dto,
+      select: { id: true }
+    });
   }
 
   async registerUser(dto: RegisterDbDto) {
     return this.prisma.usersConfirmEmail.create({ data: dto });
+  }
+
+  async createUserProfile(userId: CreateProfilePageDto) {
+    return this.prisma.profilePage.create({ data: userId });
   }
 
   async getConfirmEmailInfoByCode(code: string) {

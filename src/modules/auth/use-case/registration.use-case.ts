@@ -35,6 +35,8 @@ export class RegisterUseCase implements ICommandHandler<RegisterCommand> {
 
     const code = randomUUID();
 
+    await this.usersRepo.createUserProfile({ userId: id });
+
     await this.usersRepo.registerUser({
       confirmCode: code,
       expirationDate: addMinutesToCurrentDate(2),

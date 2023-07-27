@@ -9,6 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmailModule } from './modules/email/email.module';
 import { UserModule } from './modules/user/user.module';
+import { ProfilePageModule } from './modules/profile-page/profile-page.module';
 
 @Module({
   controllers: [AppController],
@@ -20,7 +21,8 @@ import { UserModule } from './modules/user/user.module';
     // modules
     EmailModule,
     AuthModule,
-    UserModule
+    UserModule,
+    ProfilePageModule
   ],
   providers: [AppService]
 })

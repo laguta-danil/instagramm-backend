@@ -38,7 +38,10 @@ export class RefreshTokenStrategy extends PassportStrategy(
       }
     } catch (error) {
       throw new HttpException(
-        { message: 'Your request have not refresh cookie(' },
+        {
+          message:
+            'Your request have not refresh cookie(, please login at first'
+        },
         HttpStatus.BAD_REQUEST
       );
     }

@@ -11,7 +11,7 @@ export const Trim =
         defaultMessage() {
           return `This fiaeld must be a string and not empty`;
         },
-        validate(value: any, args: ValidationArguments) {
+        validate(value, args: ValidationArguments) {
           if (typeof value !== 'string') {
             return false;
           }

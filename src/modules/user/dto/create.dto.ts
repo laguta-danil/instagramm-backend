@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEmail,
-  IsOptional,
-  IsString,
-  Length,
-  Matches,
-  Validate
-} from 'class-validator';
+import { IsEmail, IsString, Length, Matches, Validate } from 'class-validator';
 
 import { ExistUserByLoginOrEmail } from '../../../infra/decorator/user/exist.user.by.login-email';
 import { Trim } from '../../../infra/decorator/validation/trim';
@@ -54,14 +47,6 @@ export class UserDto {
   readonly email: string;
 }
 
-export class AuthUserDto extends UserDto {
-  @IsOptional()
-  readonly login: string;
-
-  @IsOptional()
-  readonly email: string;
-}
-
 export class CreateUserDto extends UserDto {
   @Validate(ExistUserByLoginOrEmail)
   readonly login: string;
@@ -76,11 +61,4 @@ export class CreateUserDbDto {
   readonly email: string;
   readonly login: string;
   readonly passwordHash: string;
-}
-
-export class UserInDb extends CreateUserDbDto {
-  readonly id: string;
-  readonly createdAt: string;
-  readonly updatedAt: string;
-  readonly refreshToken: string;
 }
