@@ -21,7 +21,6 @@ import { AuthService } from './auth.service';
 import { ConfirmRegisterUseCase } from './use-case/confirm.register.use-case';
 import { NewPasswordUseCase } from './use-case/new.password.use-case';
 import { PasswordRecoveryUseCase } from './use-case/password.recovery.use-case';
-import { AuthStatusUseCase } from './use-case/authStatus.use-case';
 import { RegisterUseCase } from './use-case/registration.use-case';
 import { ResendingUseCase } from './use-case/resending.use-case';
 
@@ -47,7 +46,6 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     ResendingUseCase,
     PasswordRecoveryUseCase,
     NewPasswordUseCase,
-    AuthStatusUseCase,
     // validation
     ExistUserByLoginOrEmail,
     IsValidConfirmCode,
