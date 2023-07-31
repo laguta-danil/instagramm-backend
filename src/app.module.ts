@@ -9,7 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmailModule } from './modules/email/email.module';
 import { UserModule } from './modules/user/user.module';
-import { ProfilePageModule } from './modules/profile-page/profile-page.module';
+import { AwsModule } from './modules/aws/aws.module';
 
 @Module({
   controllers: [AppController],
@@ -22,7 +22,7 @@ import { ProfilePageModule } from './modules/profile-page/profile-page.module';
     EmailModule,
     AuthModule,
     UserModule,
-    ProfilePageModule
+    AwsModule
   ],
   providers: [AppService]
 })

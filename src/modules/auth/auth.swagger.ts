@@ -2,12 +2,13 @@ import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiResponse
 } from '@nestjs/swagger';
 
 import { apiBadRequestResponse } from '../../utils/swagger/api.error.response';
-import { CreateUserDto } from '../user/dto/create.dto';
+import { CreateUserDto, UpdateUserProfileDto } from '../user/dto/create.dto';
 
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -82,7 +83,39 @@ export function ApiAuthorization() {
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
       description: 'Token send',
-      status: HttpStatus.NO_CONTENT
+      status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiUpdateUserProfile() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Update user profile' }),
+    ApiConsumes('multipart/form-data'),
+    ApiBody({
+      schema: {
+        properties: {
+          aboutMe: { example: 'AboutMe', type: 'string' },
+          birthdayDate: { example: '2012-04-23T18:25:43.511Z', type: 'string' },
+          city: { example: 'Washington', type: 'string' },
+          file: {
+            format: 'binary',
+            type: 'string'
+          },
+          firstName: { example: 'Vasilii', type: 'string' },
+          id: {
+            example: '9591d5f3-f07a-4f51-8455-26e49434f5b9',
+            type: 'string'
+          },
+          lastName: { example: 'Churilov', type: 'string' }
+        },
+        type: 'object'
+      }
+    }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Profile updated',
+      status: HttpStatus.OK
     })
   );
 }

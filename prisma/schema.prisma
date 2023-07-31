@@ -15,12 +15,17 @@ model User {
   email             String             @unique
   login             String             @unique
   passwordHash      String             @unique @map("pass_hash")
+  photo             String?
+  firstName         String?
+  lastName          String?
+  birthdayDate      DateTime?
+  city              String?
+  aboutMe           String?
   createdAt         DateTime           @default(now()) @map("created_at")
   updatedAt         DateTime           @default(now()) @updatedAt @map("updated_at")
   refreshToken      String             @default("empty")
   usersConfirmEmail UsersConfirmEmail?
   passwordRecovery  PasswordRecovery?
-  profilePage       ProfilePage?
 
   @@map("user")
 }
@@ -45,18 +50,4 @@ model PasswordRecovery {
   userId         String   @unique @map("user_id")
 
   @@map("users_password_recovery")
-}
-
-model ProfilePage {
-  id                String?             @id @default(uuid())
-  photo             String?             @default("empty")
-  firstName         String?             @default("empty")
-  lastName          String?             @default("empty")
-  birthdayDate      DateTime?           @default(now())
-  city              String?             @default("empty")
-  aboutMe           String?             @default("empty")
-  user              User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String?             @unique @map("user_id")
-
-  @@map("profile_page")
 }

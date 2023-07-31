@@ -5,7 +5,6 @@ import { ResendingDbDto } from '../../auth/dto/email.resending.dto';
 import { NewPasswordDbDto } from '../../auth/dto/new.password.dto';
 import { PasswordRecoveryDbDto } from '../../auth/dto/password.recovery.dto';
 import { RegisterDbDto } from '../../auth/dto/register.dto';
-import { CreateProfilePageDto } from '../../profile-page/dto/create-profile-page.dto';
 import { CreateUserDbDto } from '../dto/create.dto';
 
 @Injectable()
@@ -21,10 +20,6 @@ export class UsersRepo {
 
   async registerUser(dto: RegisterDbDto) {
     return this.prisma.usersConfirmEmail.create({ data: dto });
-  }
-
-  async createUserProfile(userId: CreateProfilePageDto) {
-    return this.prisma.profilePage.create({ data: userId });
   }
 
   async getConfirmEmailInfoByCode(code: string) {
@@ -126,10 +121,21 @@ export class UsersRepo {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async updateUser(id: string, hashedToken: string) {
+  // async updateUser(id: string, hashedToken: string) {
+  //   try {
+  //     return this.prisma.user.update({
+  //       data: { refreshToken: hashedToken },
+  //       where: { id }
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // }
+
+  async updateUserProfile(id, data) {
     try {
       return this.prisma.user.update({
-        data: { refreshToken: hashedToken },
+        data: { ...data },
         where: { id }
       });
     } catch (error) {

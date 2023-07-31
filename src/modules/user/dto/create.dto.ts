@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, Length, Matches, Validate } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Length,
+  Matches,
+  Validate
+} from 'class-validator';
 
 import { ExistUserByLoginOrEmail } from '../../../infra/decorator/user/exist.user.by.login-email';
 import { Trim } from '../../../infra/decorator/validation/trim';
@@ -61,4 +69,52 @@ export class CreateUserDbDto {
   readonly email: string;
   readonly login: string;
   readonly passwordHash: string;
+}
+
+export class UpdateUserProfileDto {
+  @ApiProperty({
+    description: 'User id',
+    example: 'f84b6b33-72f8-4240-a073-0b061f860175'
+  })
+  @IsString()
+  id: string;
+
+  @ApiProperty({
+    description: 'Firstname',
+    example: 'Ivan'
+  })
+  @IsString()
+  firstName: string;
+
+  @ApiProperty({
+    description: 'Lastname',
+    example: 'Ivanov'
+  })
+  @IsString()
+  lastName: string;
+
+  @ApiProperty({
+    description: 'Lastname',
+    example: '2022-04-23T10:25:43.511Z'
+  })
+  @IsString()
+  birthdayDate: string;
+
+  @ApiProperty({
+    description: 'City Name',
+    example: 'New york'
+  })
+  @IsString()
+  city: string;
+
+  @ApiProperty({
+    description: 'About me',
+    example: 'About me'
+  })
+  @IsString()
+  aboutMe: string;
+
+  @IsOptional()
+  @IsUrl()
+  photo?: string;
 }
