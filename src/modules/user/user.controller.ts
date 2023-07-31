@@ -4,6 +4,7 @@ import {
   HttpCode,
   HttpStatus,
   Patch,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors
@@ -33,11 +34,12 @@ export class UserController {
   @ApiUpdateUserProfile()
   @UseInterceptors(FileInterceptor('file'))
   async updateUserProfile(
+    @Req() req,
     @Body() profileData: UpdateUserProfileDto,
     @UploadedFile() file: Express.Multer.File
   ) {
     return this.commandBus.execute(
-      new UpdateUserProfileCommand({ file, profileData })
+      new UpdateUserProfileCommand({ file, id: req.user.id, profileData })
     );
   }
 }

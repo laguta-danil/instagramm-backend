@@ -73,13 +73,6 @@ export class CreateUserDbDto {
 
 export class UpdateUserProfileDto {
   @ApiProperty({
-    description: 'User id',
-    example: 'f84b6b33-72f8-4240-a073-0b061f860175'
-  })
-  @IsString()
-  id: string;
-
-  @ApiProperty({
     description: 'Firstname',
     example: 'Ivan'
   })

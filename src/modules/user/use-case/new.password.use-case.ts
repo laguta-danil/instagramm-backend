@@ -6,7 +6,11 @@ import { UpdateUserProfileDto } from '../dto/create.dto';
 
 export class UpdateUserProfileCommand {
   constructor(
-    public dto: { profileData: UpdateUserProfileDto; file: Express.Multer.File }
+    public dto: {
+      profileData: UpdateUserProfileDto;
+      file: Express.Multer.File;
+      id: string;
+    }
   ) {}
 }
 
@@ -20,7 +24,7 @@ export class UpdateUserProfileUseCase
   ) {}
 
   async execute({ dto }: UpdateUserProfileCommand) {
-    const { id } = dto.profileData;
+    const { id } = dto;
     const { file } = dto;
     const fileData = await this.awsS3ProfileBucket.uploadFile(file);
     dto.profileData.photo = fileData.Location;
