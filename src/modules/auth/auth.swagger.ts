@@ -103,10 +103,6 @@ export function ApiUpdateUserProfile() {
             type: 'string'
           },
           firstName: { example: 'Vasilii', type: 'string' },
-          id: {
-            example: '9591d5f3-f07a-4f51-8455-26e49434f5b9',
-            type: 'string'
-          },
           lastName: { example: 'Churilov', type: 'string' }
         },
         type: 'object'
