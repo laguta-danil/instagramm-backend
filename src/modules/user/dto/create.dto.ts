@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsOptional,
   IsString,
+  IsUrl,
   Length,
   Matches,
   Validate
@@ -54,14 +55,6 @@ export class UserDto {
   readonly email: string;
 }
 
-export class AuthUserDto extends UserDto {
-  @IsOptional()
-  readonly login: string;
-
-  @IsOptional()
-  readonly email: string;
-}
-
 export class CreateUserDto extends UserDto {
   @Validate(ExistUserByLoginOrEmail)
   readonly login: string;
@@ -78,9 +71,50 @@ export class CreateUserDbDto {
   readonly passwordHash: string;
 }
 
-export class UserInDb extends CreateUserDbDto {
-  readonly id: string;
-  readonly createdAt: string;
-  readonly updatedAt: string;
-  readonly refreshToken: string;
+export class UpdateUserProfileDto {
+  @ApiProperty({
+    description: 'User id',
+    example: 'f84b6b33-72f8-4240-a073-0b061f860175'
+  })
+  @IsString()
+  id: string;
+
+  @ApiProperty({
+    description: 'Firstname',
+    example: 'Ivan'
+  })
+  @IsString()
+  firstName: string;
+
+  @ApiProperty({
+    description: 'Lastname',
+    example: 'Ivanov'
+  })
+  @IsString()
+  lastName: string;
+
+  @ApiProperty({
+    description: 'Lastname',
+    example: '2022-04-23T10:25:43.511Z'
+  })
+  @IsString()
+  birthdayDate: string;
+
+  @ApiProperty({
+    description: 'City Name',
+    example: 'New york'
+  })
+  @IsString()
+  city: string;
+
+  @ApiProperty({
+    description: 'About me',
+    example: 'About me'
+  })
+  @IsString()
+  aboutMe: string;
+
+  @IsOptional()
+  @IsUrl()
+  photo?: string;
 }

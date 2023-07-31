@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -25,14 +30,21 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   private static extractJWTFromCookie(req: Request): string | null {
-    if (
-      req.cookies.Authorization &&
-      'accessToken' in req.cookies.Authorization
-    ) {
-      return req.cookies.Authorization.accessToken;
+    try {
+      if (
+        req.cookies.Authorization &&
+        'accessToken' in req.cookies.Authorization
+      ) {
+        return req.cookies.Authorization.accessToken;
+      }
+    } catch (error) {
+      throw new HttpException(
+        {
+          message: 'Your request have not access cookie(, please login at first'
+        },
+        HttpStatus.BAD_REQUEST
+      );
     }
-
-    return null;
   }
 
   async validate(payload: { id: string }) {

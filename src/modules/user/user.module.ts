@@ -1,20 +1,24 @@
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../database/prisma.service';
+import { AwsS3Service } from '../aws/aws.service';
 
-import { UsersQueryRepo } from './repositories/user.query.repo';
 import { UsersRepo } from './repositories/user.repo';
+import { UpdateUserProfileUseCase } from './use-case/new.password.use-case';
 import { UserController } from './user.controller';
-import { UserService } from './user.service';
 
 @Module({
   controllers: [UserController],
+  imports: [CqrsModule],
   providers: [
     // service
     PrismaService,
-    UserService,
+    AwsS3Service,
+    // repositories
     UsersRepo,
-    UsersQueryRepo
+
+    UpdateUserProfileUseCase
   ]
 })
 export class UserModule {}

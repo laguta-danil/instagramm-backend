@@ -46,14 +46,16 @@ export class AuthService {
     refreshToken: string
   ) {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    await this.usersRepo.updateUser(userId, hashedRefreshToken);
+    await this.usersRepo.updateUserProfile(userId, {
+      refreshToken: hashedRefreshToken
+    });
   }
 
-  async login(user): Promise<AuthTokenDto> {
-    const foundUser = await this.usersRepo.findById(user.id);
-    if (foundUser) {
-      const tokens = await this.getJwtTokens(user.id);
-      await this.updateRefreshTokenInUserRep(user.id, tokens.refreshToken);
+  async login(data) {
+    const user = await this.usersRepo.findById(data.id);
+    if (user) {
+      const tokens = await this.getJwtTokens(data.id);
+      await this.updateRefreshTokenInUserRep(data.id, tokens.refreshToken);
 
       return tokens;
     }
