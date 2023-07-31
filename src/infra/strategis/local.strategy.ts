@@ -7,12 +7,12 @@ import { AuthService } from '../../modules/auth/auth.service';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
-    super();
+    super({ usernameField: 'login' });
   }
 
-  async validate(username: string, password: string) {
+  async validate(login: string, password: string) {
     try {
-      return await this.authService.validateUser(username, password);
+      return await this.authService.validateUser(login, password);
     } catch (error) {
       throw new HttpException(
         { message: 'Wrong credentials provided' },

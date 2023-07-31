@@ -10,7 +10,7 @@ export class LoginDto {
     pattern: '[a-zA-Z0-9_-]*$',
     uniqueItems: true
   })
-  readonly username: string;
+  readonly login: string;
 
   @ApiProperty({
     description: 'User password',
