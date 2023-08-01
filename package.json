@@ -33,6 +33,7 @@
     "@nestjs/serve-static": "^4.0.0",
     "@nestjs/swagger": "^7.1.1",
     "@prisma/client": "^5.0.0",
+    "@types/multer": "^1.4.7",
     "aws-sdk": "^2.1424.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",

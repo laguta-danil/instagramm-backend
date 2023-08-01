@@ -1,8 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { AwsS3Service } from '../../aws/aws.service';
-import { UsersRepo } from '../repositories/user.repo';
 import { UpdateUserProfileDto } from '../dto/create.dto';
+import { UsersRepo } from '../repositories/user.repo';
 
 export class UpdateUserProfileCommand {
   constructor(

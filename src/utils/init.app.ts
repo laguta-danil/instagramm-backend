@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import cookieParser from 'cookie-parser';
-import { DynamoDB, S3 } from 'aws-sdk';
+// import { S3 } from 'aws-sdk';
 
 import { AppModule } from '../app.module';
 import { HttpExceptionFilter } from '../infra/exception-filter/http.exception.filter';
@@ -13,7 +13,7 @@ export const initApp = (app: INestApplication): INestApplication => {
     origin: true
   });
 
-  const client = new S3({});
+  // const client = new S3({});
 
   app.useGlobalPipes(GlobalValidationPipe);
 
