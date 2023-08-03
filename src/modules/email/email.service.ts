@@ -2,6 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OnEvent } from '@nestjs/event-emitter';
+import { JwtService } from '@nestjs/jwt';
 
 import { EnvEnum } from '../../utils/env.enum';
 import { EventEnum } from '../../utils/event.enum';
@@ -9,7 +10,9 @@ import { EventEnum } from '../../utils/event.enum';
 const {
   MAILER_SUBJECT,
   FRONTEND_CONFIRM_EMAIL_LINK,
-  FRONTEND_PASSWORD_RECOVERY_LINK
+  FRONTEND_PASSWORD_RECOVERY_LINK,
+  JWT_EMAIL_VERIFY_SECRET,
+  JWT_EMAIL_VERIFY_EXPIRED
 } = EnvEnum;
 
 @Injectable()
@@ -18,7 +21,8 @@ export class EmailService {
 
   constructor(
     private mailerService: MailerService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private jwtGenerator: JwtService
   ) {}
 
   @OnEvent(EventEnum.SEND_REGISTER_EMAIL_EVENT)
@@ -26,7 +30,7 @@ export class EmailService {
     try {
       await this.mailerService.sendMail({
         context: {
-          code,
+          code: `${code}&email=${email}`,
           link: this.configService.get(FRONTEND_CONFIRM_EMAIL_LINK)
         },
         subject: this.configService.get(MAILER_SUBJECT),
@@ -50,7 +54,7 @@ export class EmailService {
     try {
       await this.mailerService.sendMail({
         context: {
-          code,
+          code: `${code}&email=${email}`,
           link: this.configService.get(FRONTEND_PASSWORD_RECOVERY_LINK)
         },
         subject: this.configService.get(MAILER_SUBJECT),

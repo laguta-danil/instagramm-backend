@@ -13,8 +13,6 @@ export const initApp = (app: INestApplication): INestApplication => {
     origin: true
   });
 
-  const client = new S3({});
-
   app.useGlobalPipes(GlobalValidationPipe);
 
   app.useGlobalFilters(new HttpExceptionFilter());
