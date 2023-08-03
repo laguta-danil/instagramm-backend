@@ -115,3 +115,27 @@ export function ApiUpdateUserProfile() {
     })
   );
 }
+
+export function ApiDeleteUser() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Update user profile' }),
+    ApiConsumes('multipart/form-data'),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Profile updated',
+      status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiGetUserProfile() {
+  return applyDecorators(
+    ApiOperation({ summary: 'User profile sended' }),
+    ApiBody({ type: UpdateUserProfileDto }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Send registration email with code to user',
+      status: HttpStatus.NO_CONTENT
+    })
+  );
+}

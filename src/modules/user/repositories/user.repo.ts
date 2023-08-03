@@ -142,4 +142,14 @@ export class UsersRepo {
       return error;
     }
   }
+
+  async deleteUser(id) {
+    try {
+      return this.prisma.user.delete({
+        where: { id }
+      });
+    } catch (error) {
+      return error;
+    }
+  }
 }

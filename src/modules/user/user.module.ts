@@ -5,7 +5,9 @@ import { PrismaService } from '../../database/prisma.service';
 import { AwsS3Service } from '../aws/aws.service';
 
 import { UsersRepo } from './repositories/user.repo';
-import { UpdateUserProfileUseCase } from './use-case/new.password.use-case';
+import { DeleteUserUseCase } from './use-case/delete.user.use-case';
+import { GetUserProfileUseCase } from './use-case/get.user.profile.use-case';
+import { UpdateUserProfileUseCase } from './use-case/update.user.profile.use-case';
 import { UserController } from './user.controller';
 
 @Module({
@@ -15,10 +17,11 @@ import { UserController } from './user.controller';
     // service
     PrismaService,
     AwsS3Service,
+    UpdateUserProfileUseCase,
+    DeleteUserUseCase,
+    GetUserProfileUseCase,
     // repositories
-    UsersRepo,
-
-    UpdateUserProfileUseCase
+    UsersRepo
   ]
 })
 export class UserModule {}

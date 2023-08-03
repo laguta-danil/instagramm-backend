@@ -2,7 +2,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OnEvent } from '@nestjs/event-emitter';
-import { JwtService } from '@nestjs/jwt';
 
 import { EnvEnum } from '../../utils/env.enum';
 import { EventEnum } from '../../utils/event.enum';
@@ -10,9 +9,7 @@ import { EventEnum } from '../../utils/event.enum';
 const {
   MAILER_SUBJECT,
   FRONTEND_CONFIRM_EMAIL_LINK,
-  FRONTEND_PASSWORD_RECOVERY_LINK,
-  JWT_EMAIL_VERIFY_SECRET,
-  JWT_EMAIL_VERIFY_EXPIRED
+  FRONTEND_PASSWORD_RECOVERY_LINK
 } = EnvEnum;
 
 @Injectable()
@@ -21,8 +18,7 @@ export class EmailService {
 
   constructor(
     private mailerService: MailerService,
-    private configService: ConfigService,
-    private jwtGenerator: JwtService
+    private configService: ConfigService
   ) {}
 
   @OnEvent(EventEnum.SEND_REGISTER_EMAIL_EVENT)
