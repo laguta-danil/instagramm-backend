@@ -118,11 +118,10 @@ export function ApiUpdateUserProfile() {
 
 export function ApiDeleteUser() {
   return applyDecorators(
-    ApiOperation({ summary: 'Update user profile' }),
-    ApiConsumes('multipart/form-data'),
+    ApiOperation({ summary: 'Delete user!!!' }),
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
-      description: 'Profile updated',
+      description: 'User deleted',
       status: HttpStatus.OK
     })
   );
@@ -130,10 +129,10 @@ export function ApiDeleteUser() {
 
 export function ApiGetUserProfile() {
   return applyDecorators(
-    ApiOperation({ summary: 'User profile sent' }),
+    ApiOperation({ summary: 'Get user profilez' }),
     ApiBadRequestResponse(apiBadRequestResponse),
     ApiResponse({
-      description: 'Send registration email with code to user',
+      description: 'User profile sent',
       status: HttpStatus.NO_CONTENT
     })
   );

@@ -16,7 +16,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 
 import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
-import { ApiGetUserProfile, ApiUpdateUserProfile } from '../auth/auth.swagger';
+import {
+  ApiDeleteUser,
+  ApiGetUserProfile,
+  ApiUpdateUserProfile
+} from '../auth/auth.swagger';
 import { AwsS3Service } from '../aws/aws.service';
 
 import { UpdateUserProfileDto } from './dto/create.dto';
@@ -49,7 +53,7 @@ export class UserController {
 
   @Delete('/delete')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiUpdateUserProfile()
+  @ApiDeleteUser()
   async deleteUser(@Req() req) {
     return this.commandBus.execute(new DeleteUserCommand({ id: req.user.id }));
   }
