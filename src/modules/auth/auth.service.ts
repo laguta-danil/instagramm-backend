@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { ApiJwtService } from '../jwt/apiJwt.services';
+import { AuthTokenDto } from '../jwt/dto/auth.dto';
 import { UsersRepo } from '../user/repositories/user.repo';
 
 interface Info {

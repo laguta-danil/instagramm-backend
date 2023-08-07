@@ -8,11 +8,11 @@ import {
 } from '@nestjs/swagger';
 
 import { apiBadRequestResponse } from '../../utils/swagger/api.error.response';
-import { CreateUserDto } from '../user/dto/create.dto';
+import { CreateUserDto, UpdateUserProfileDto } from '../user/dto/create.dto';
 
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
-import { ResendingDto } from './dto/email.resending.dto';
 import { LoginDto } from './dto/login.dto';
+import { ResendingDto } from './dto/email.resending.dto';
 import { NewPasswordDto } from './dto/new.password.dto';
 import { PasswordRecoveryDto } from './dto/password.recovery.dto';
 
