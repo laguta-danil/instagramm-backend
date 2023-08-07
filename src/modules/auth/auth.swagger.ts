@@ -8,11 +8,11 @@ import {
 } from '@nestjs/swagger';
 
 import { apiBadRequestResponse } from '../../utils/swagger/api.error.response';
-import { CreateUserDto, UpdateUserProfileDto } from '../user/dto/create.dto';
+import { CreateUserDto } from '../user/dto/create.dto';
 
 import { ConfirmRegisterDto } from './dto/confirm.register.dto';
-import { LoginDto } from './dto/login.dto';
 import { ResendingDto } from './dto/email.resending.dto';
+import { LoginDto } from './dto/login.dto';
 import { NewPasswordDto } from './dto/new.password.dto';
 import { PasswordRecoveryDto } from './dto/password.recovery.dto';
 
@@ -112,6 +112,28 @@ export function ApiUpdateUserProfile() {
     ApiResponse({
       description: 'Profile updated',
       status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiDeleteUser() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Delete user!!!' }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'User deleted',
+      status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiGetUserProfile() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Get user profilez' }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'User profile sent',
+      status: HttpStatus.NO_CONTENT
     })
   );
 }

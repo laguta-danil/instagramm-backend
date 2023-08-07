@@ -26,7 +26,7 @@ export class EmailService {
     try {
       await this.mailerService.sendMail({
         context: {
-          code,
+          code: `${code}&email=${email}`,
           link: this.configService.get(FRONTEND_CONFIRM_EMAIL_LINK)
         },
         subject: this.configService.get(MAILER_SUBJECT),
@@ -50,7 +50,7 @@ export class EmailService {
     try {
       await this.mailerService.sendMail({
         context: {
-          code,
+          code: `${code}&email=${email}`,
           link: this.configService.get(FRONTEND_PASSWORD_RECOVERY_LINK)
         },
         subject: this.configService.get(MAILER_SUBJECT),

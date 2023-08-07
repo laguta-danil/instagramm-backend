@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Patch,
@@ -14,11 +16,17 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 
 import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
-import { ApiUpdateUserProfile } from '../auth/auth.swagger';
+import {
+  ApiDeleteUser,
+  ApiGetUserProfile,
+  ApiUpdateUserProfile
+} from '../auth/auth.swagger';
 import { AwsS3Service } from '../aws/aws.service';
 
 import { UpdateUserProfileDto } from './dto/create.dto';
-import { UpdateUserProfileCommand } from './use-case/new.password.use-case';
+import { DeleteUserCommand } from './use-case/delete.user.use-case';
+import { GetUserProfileCommand } from './use-case/get.user.profile.use-case';
+import { UpdateUserProfileCommand } from './use-case/update.user.profile.use-case';
 
 @ApiTags('User')
 @UseGuards(JwtAuthGuard)
@@ -40,6 +48,22 @@ export class UserController {
   ) {
     return this.commandBus.execute(
       new UpdateUserProfileCommand({ file, id: req.user.id, profileData })
+    );
+  }
+
+  @Delete('/delete')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiDeleteUser()
+  async deleteUser(@Req() req) {
+    return this.commandBus.execute(new DeleteUserCommand({ id: req.user.id }));
+  }
+
+  @Get('/profile')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiGetUserProfile()
+  async getUserProfile(@Req() req) {
+    return this.commandBus.execute(
+      new GetUserProfileCommand({ id: req.user.id })
     );
   }
 }
