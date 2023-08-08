@@ -26,6 +26,7 @@ model User {
   refreshToken      String             @default("empty")
   usersConfirmEmail UsersConfirmEmail?
   passwordRecovery  PasswordRecovery?
+  posts             Post[]
 
   @@map("user")
 }
@@ -50,4 +51,17 @@ model PasswordRecovery {
   userId         String   @unique @map("user_id")
 
   @@map("users_password_recovery")
+}
+
+model Post {
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  likes          Int?     @default(0)
+  share          String[]
+  image          String[]
+  author         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String   @map("user_id")
+
+  @@map("users_post")
 }
