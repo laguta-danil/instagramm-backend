@@ -13,6 +13,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 
 import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
+import { RecaptchaGuard } from '../../infra/guards/recaptcha.guard';
 import { RefreshAuthGuard } from '../../infra/guards/refresh-auth.guard';
 import { CreateUserDto } from '../user/dto/create.dto';
 
@@ -65,6 +66,7 @@ export class AuthController {
   }
 
   @Post('/password-recovery')
+  @UseGuards(RecaptchaGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiPasswordRecovery()
   recoveryPassword(@Body() dto: PasswordRecoveryDto) {
