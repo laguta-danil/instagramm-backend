@@ -6,10 +6,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MailerConfig } from './config/mailer.config';
 import { DatabaseModule } from './database/database.module';
+import { PrismaService } from './database/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { AwsModule } from './modules/aws/aws.module';
 import { EmailModule } from './modules/email/email.module';
 import { UserModule } from './modules/user/user.module';
-import { AwsModule } from './modules/aws/aws.module';
 
 @Module({
   controllers: [AppController],
@@ -24,6 +25,6 @@ import { AwsModule } from './modules/aws/aws.module';
     UserModule,
     AwsModule
   ],
-  providers: [AppService]
+  providers: [AppService, PrismaService]
 })
 export class AppModule {}
