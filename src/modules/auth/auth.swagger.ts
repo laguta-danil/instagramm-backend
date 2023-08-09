@@ -54,9 +54,10 @@ export function ApiResendingRegistration() {
 
 export function ApiPasswordRecovery() {
   return applyDecorators(
-    ApiOperation({ summary: 'Password recovery' }),
+    ApiOperation({ summary: 'Password recovery with Recaptcha' }),
     ApiBody({ type: PasswordRecoveryDto }),
     ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({ description: 'Forbidden', status: HttpStatus.FORBIDDEN }),
     ApiResponse({
       description: 'Send recovery email with code to user',
       status: HttpStatus.NO_CONTENT

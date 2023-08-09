@@ -15,6 +15,11 @@ export class PasswordRecoveryDto {
   @Trim()
   @IsString()
   readonly email: string;
+
+  @ApiProperty({ description: 'recaptcha value' })
+  @Trim()
+  @IsString()
+  readonly recaptchaValue: string;
 }
 
 export class PasswordRecoveryDbDto {
