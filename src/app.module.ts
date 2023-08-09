@@ -10,6 +10,7 @@ import { PrismaService } from './database/prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { AwsModule } from './modules/aws/aws.module';
 import { EmailModule } from './modules/email/email.module';
+import { PostModule } from './modules/post/post.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -23,7 +24,8 @@ import { UserModule } from './modules/user/user.module';
     EmailModule,
     AuthModule,
     UserModule,
-    AwsModule
+    AwsModule,
+    PostModule
   ],
   providers: [AppService, PrismaService]
 })
