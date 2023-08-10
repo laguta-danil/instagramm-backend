@@ -138,3 +138,114 @@ export function ApiGetUserProfile() {
     })
   );
 }
+
+export function ApiGetPost() {
+  return applyDecorators(
+    ApiOperation({ summary: "Get user's post by id" }),
+    ApiBody({
+      schema: {
+        properties: {
+          id: {
+            example: '30cad7d0-2539-475b-bcf0-79e957a09863',
+            type: 'string'
+          }
+        }
+      }
+    }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Post send',
+      status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiGetPosts() {
+  return applyDecorators(
+    ApiOperation({ summary: "Get all user's posts" }),
+    ApiResponse({
+      description: "User's posts send",
+      status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiUpdatePost() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Update Post (For multiply upload test this endpoint in Postman, because swagger can not upload more then one file)'
+    }),
+    ApiBody({
+      schema: {
+        properties: {
+          description: { example: 'Some description', type: 'string' },
+          files: {
+            format: 'binary',
+            type: 'string'
+          },
+          id: {
+            example: '72f5b68e-6843-4cb3-b119-05e6a75d1b3f',
+            type: 'string'
+          },
+          title: { example: 'Title of post', type: 'string' }
+        },
+        type: 'object'
+      }
+    }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Post updated',
+      status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiDeletePost() {
+  return applyDecorators(
+    ApiOperation({ summary: 'Delete post by id' }),
+    ApiBody({
+      schema: {
+        properties: {
+          id: {
+            example: '30cad7d0-2539-475b-bcf0-79e957a09863',
+            type: 'string'
+          }
+        }
+      }
+    }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Post deleted',
+      status: HttpStatus.OK
+    })
+  );
+}
+
+export function ApiCreatePost() {
+  return applyDecorators(
+    ApiOperation({
+      summary:
+        'Create new Post (For multiply upload test this endpoint in Postman, because swagger can not upload more then one file)'
+    }),
+    ApiConsumes('multipart/form-data'),
+    ApiBody({
+      schema: {
+        properties: {
+          description: { example: 'Some description', type: 'string' },
+          files: {
+            format: 'binary',
+            type: 'string'
+          },
+          title: { example: 'Title of post', type: 'string' }
+        },
+        type: 'object'
+      }
+    }),
+    ApiBadRequestResponse(apiBadRequestResponse),
+    ApiResponse({
+      description: 'Post uploaded',
+      status: HttpStatus.OK
+    })
+  );
+}

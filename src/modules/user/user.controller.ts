@@ -21,7 +21,6 @@ import {
   ApiGetUserProfile,
   ApiUpdateUserProfile
 } from '../auth/auth.swagger';
-import { AwsS3Service } from '../aws/aws.service';
 
 import { UpdateUserProfileDto } from './dto/create.dto';
 import { DeleteUserCommand } from './use-case/delete.user.use-case';
@@ -32,10 +31,7 @@ import { UpdateUserProfileCommand } from './use-case/update.user.profile.use-cas
 @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly commandBus: CommandBus,
-    private awsS3ProfileBuket: AwsS3Service
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   @Patch()
   @HttpCode(HttpStatus.NO_CONTENT)
