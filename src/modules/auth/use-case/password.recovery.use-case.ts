@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { addMinutesToCurrentDate } from '../../../helper/add.minutes.to.current.date';
+import { customBadRequestException } from '../../../helper/custom.bad.request.exeption';
 import { EmailService } from '../../email/email.service';
 import { UsersRepo } from '../../user/repositories/user.repo';
 
@@ -23,7 +24,7 @@ export class PasswordRecoveryUseCase
     const user = await this.usersRepo.checkUserByEmail(email);
 
     if (!user) {
-      return;
+      return customBadRequestException('email', 'invalid email');
     }
 
     const recoveryCode = randomUUID();

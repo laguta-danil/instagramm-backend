@@ -29,10 +29,7 @@ export class RecaptchaGuard implements CanActivate {
 
     const res = await fetch(
       `https://www.google.com/recaptcha/api/siteverify?response=${value}&secret=${this.recaptchaSecret}`,
-      {
-        headers: { 'Content-Type': 'application/json' },
-        method: 'POST'
-      }
+      { headers: { 'Content-Type': 'application/json' }, method: 'POST' }
     );
 
     const data: Recaptcha = await res.json();
