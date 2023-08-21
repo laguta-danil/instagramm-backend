@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Patch,
   Req,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors
@@ -57,9 +58,10 @@ export class UserController {
   @Get('/profile')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiGetUserProfile()
-  async getUserProfile(@Req() req) {
-    return this.commandBus.execute(
+  async getUserProfile(@Req() req, @Res() res) {
+    const userProfile = await this.commandBus.execute(
       new GetUserProfileCommand({ id: req.user.id })
     );
+    res.status(200).send(userProfile);
   }
 }

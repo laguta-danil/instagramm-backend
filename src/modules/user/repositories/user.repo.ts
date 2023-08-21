@@ -121,17 +121,6 @@ export class UsersRepo {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  // async updateUser(id: string, hashedToken: string) {
-  //   try {
-  //     return this.prisma.user.update({
-  //       data: { refreshToken: hashedToken },
-  //       where: { id }
-  //     });
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // }
-
   async updateUserProfile(id, data) {
     try {
       return this.prisma.user.update({

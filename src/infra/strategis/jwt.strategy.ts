@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { UsersRepo } from '../../modules/user/repositories/user.repo';
 import { EnvEnum } from '../../utils/env.enum';
@@ -49,7 +49,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: { id: string }) {
     const user = await this.usersRepo.findById(payload.id);
-
     if (!user) {
       throw new UnauthorizedException();
     }

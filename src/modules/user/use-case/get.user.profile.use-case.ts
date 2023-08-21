@@ -13,9 +13,6 @@ export class GetUserProfileUseCase
   constructor(private usersRepo: UsersRepo) {}
 
   async execute({ dto }: GetUserProfileCommand) {
-    const user = await this.usersRepo.findById(dto.id);
-    console.log(user);
-
-    return user;
+    return this.usersRepo.findById(dto.id);
   }
 }

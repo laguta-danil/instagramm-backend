@@ -24,6 +24,7 @@ export class PrismaService
       params?.args?.select?.passwordHash !== true
     ) {
       delete result.passwordHash;
+      delete result.refreshToken;
     }
 
     return result;
