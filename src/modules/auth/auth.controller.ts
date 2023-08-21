@@ -85,7 +85,9 @@ export class AuthController {
   async refreshTokens(@Req() req, @Res({ passthrough: true }) res) {
     const newAuthToken = await this.authService.refreshAccessToken(req);
     res.cookie('Authorization', newAuthToken, { httpOnly: true });
-    res.status(200).send({ message: 'Success' });
+    res
+      .status(200)
+      .send({ accessToken: newAuthToken.accessToken, message: 'Success' });
   }
 
   @Post('/login')
