@@ -6,6 +6,8 @@ import { AppModule } from '../app.module';
 import { HttpExceptionFilter } from '../infra/exception-filter/http.exception.filter';
 import { GlobalValidationPipe } from '../infra/pipe/global.validation.pipe';
 
+import { SwaggerConfig } from './swagger/swagger';
+
 export const initApp = (app: INestApplication): INestApplication => {
   app.enableCors({
     credentials: true,
@@ -17,6 +19,8 @@ export const initApp = (app: INestApplication): INestApplication => {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   app.use(cookieParser());
+
+  SwaggerConfig.create(app);
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 

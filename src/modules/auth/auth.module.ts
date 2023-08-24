@@ -12,8 +12,8 @@ import { ExistUserByLoginOrEmail } from '../../infra/decorator/user/exist.user.b
 import { RefreshTokenStrategy } from '../../infra/strategis/jwt-refresh.strategy';
 import { JwtStrategy } from '../../infra/strategis/jwt.strategy';
 import { LocalStrategy } from '../../infra/strategis/local.strategy';
-import { ApiJwtModule } from '../jwt/apiJwt.module';
 import { EmailService } from '../email/email.service';
+import { ApiJwtModule } from '../jwt/apiJwt.module';
 import { UsersRepo } from '../user/repositories/user.repo';
 
 import { AuthController } from './auth.controller';
@@ -36,7 +36,6 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     // service
     PrismaService,
     JwtService,
-    AuthService,
     EmailService,
     AuthService,
     UsersRepo,

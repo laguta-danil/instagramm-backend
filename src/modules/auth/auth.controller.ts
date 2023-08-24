@@ -96,7 +96,10 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async login(@Req() req, @Res() res) {
     const authToken = await this.authService.login(req.user);
-    res.cookie('Authorization', authToken, { httpOnly: true });
+    res.cookie('Authorization', authToken, {
+      httpOnly: true,
+      sameSite: 'none'
+    });
     res
       .status(200)
       .send({ accessToken: authToken.accessToken, message: 'Success' });
