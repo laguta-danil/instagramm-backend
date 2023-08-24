@@ -98,7 +98,8 @@ export class AuthController {
     const authToken = await this.authService.login(req.user);
     res.cookie('Authorization', authToken, {
       httpOnly: true,
-      sameSite: 'none'
+      sameSite: 'none',
+      secure: true
     });
     res
       .status(200)
