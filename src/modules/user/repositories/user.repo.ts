@@ -68,7 +68,14 @@ export class UsersRepo {
     });
   }
 
-  async findById(id: string) {
+  async findById(id: string, selectParam: string = null) {
+    if (selectParam) {
+      return this.prisma.user.findFirst({
+        select: { id: true, [selectParam]: true },
+        where: { id }
+      });
+    }
+
     return this.prisma.user.findFirst({
       where: { id }
     });

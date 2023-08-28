@@ -1,8 +1,8 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
 import { Request as RequestType } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { EnvEnum } from '../../utils/env.enum';
 
@@ -26,9 +26,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   async validate(req: RequestType, payload) {
-    const refreshToken = req.cookies.Authorization.refreshToken;
-
-    return { ...payload, refreshToken };
+    return { ...payload, refreshToken: true };
   }
 
   private static extractJWTFromCookie(req: RequestType): string | null {
@@ -40,7 +38,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
       throw new HttpException(
         {
           message:
-            'Your request have not refresh cookie(, please login at first'
+            'Your request have not refresh token in your cookie(, please login at first'
         },
         HttpStatus.BAD_REQUEST
       );

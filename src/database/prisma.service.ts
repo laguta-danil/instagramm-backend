@@ -24,6 +24,12 @@ export class PrismaService
       params?.args?.select?.passwordHash !== true
     ) {
       delete result.passwordHash;
+    }
+
+    if (
+      params?.model === 'User' &&
+      params?.args?.select?.refreshToken !== true
+    ) {
       delete result.refreshToken;
     }
 

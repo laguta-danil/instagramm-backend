@@ -68,7 +68,7 @@ export class AuthService {
   async refreshAccessToken(req) {
     const id = req.user.userId;
     const refreshToken = req.cookies.Authorization.refreshToken;
-    const user = await this.usersRepo.findById(id);
+    const user: any = await this.usersRepo.findById(id, 'refreshToken');
 
     if (await bcrypt.compare(refreshToken, user.refreshToken)) {
       return this.apiJwtService.getNewAccessToken(user.id, refreshToken);
