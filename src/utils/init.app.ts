@@ -9,6 +9,8 @@ import { GlobalValidationPipe } from '../infra/pipe/global.validation.pipe';
 import { SwaggerConfig } from './swagger/swagger';
 
 export const initApp = (app: INestApplication): INestApplication => {
+  app.use(cookieParser());
+
   app.enableCors({
     credentials: true,
     origin: true
@@ -17,8 +19,6 @@ export const initApp = (app: INestApplication): INestApplication => {
   app.useGlobalPipes(GlobalValidationPipe);
 
   app.useGlobalFilters(new HttpExceptionFilter());
-
-  app.use(cookieParser());
 
   SwaggerConfig.create(app);
 
