@@ -113,7 +113,11 @@ export class AuthController {
   @Post('/logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Res() res) {
-    res.cookie('Authorization', null, { httpOnly: true });
+    res.cookie('Authorization', null, {
+      httpOnly: true,
+      sameSite: 'None',
+      secure: true
+    });
     res.sendStatus(200);
   }
 }
