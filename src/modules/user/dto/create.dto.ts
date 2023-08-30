@@ -5,11 +5,9 @@ import {
   IsString,
   IsUrl,
   Length,
-  Matches,
-  Validate
+  Matches
 } from 'class-validator';
 
-import { ExistUserByLoginOrEmail } from '../../../infra/decorator/user/exist.user.by.login-email';
 import { Trim } from '../../../infra/decorator/validation/trim';
 
 export class UserDto {
@@ -56,12 +54,15 @@ export class UserDto {
 }
 
 export class CreateUserDto extends UserDto {
-  @Validate(ExistUserByLoginOrEmail)
+  @IsString()
+  // @Validate(ExistUserByLoginOrEmail)
   readonly login: string;
 
-  @Validate(ExistUserByLoginOrEmail)
+  @IsString()
+  // @Validate(ExistUserByLoginOrEmail)
   readonly email: string;
 
+  @IsString()
   readonly password: string;
 }
 

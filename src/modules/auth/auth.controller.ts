@@ -86,7 +86,7 @@ export class AuthController {
     const newAuthToken = await this.authService.refreshAccessToken(req);
     res.cookie('Authorization', newAuthToken, {
       httpOnly: true,
-      sameSite: 'None',
+      sameSite: 'Strict',
       secure: true
     });
     res
@@ -102,7 +102,7 @@ export class AuthController {
     const authToken = await this.authService.login(req.user);
     res.cookie('Authorization', authToken, {
       httpOnly: true,
-      sameSite: 'None',
+      sameSite: 'Strict',
       secure: true
     });
     res
