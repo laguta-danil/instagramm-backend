@@ -87,7 +87,7 @@ export class AuthController {
     res.cookie('Authorization', newAuthToken, {
       httpOnly: true,
       sameSite: 'None',
-      secure: false
+      secure: true
     });
     res
       .status(200)
@@ -103,7 +103,7 @@ export class AuthController {
     res.cookie('Authorization', authToken, {
       httpOnly: true,
       sameSite: 'None',
-      secure: false
+      secure: true
     });
     res
       .status(200)

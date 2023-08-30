@@ -61,6 +61,8 @@ export class CreateUserDto extends UserDto {
 
   @Validate(ExistUserByLoginOrEmail)
   readonly email: string;
+
+  readonly password: string;
 }
 
 export class CreateUserServiceDto extends CreateUserDto {}
