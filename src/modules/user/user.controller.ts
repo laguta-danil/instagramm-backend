@@ -15,8 +15,10 @@ import {
 import { CommandBus } from '@nestjs/cqrs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
+import { RequestWithUserData } from '../../infra/types/RequestWithUserData';
 import {
   ApiDeleteUser,
   ApiGetUserProfile,
@@ -39,7 +41,7 @@ export class UserController {
   @ApiUpdateUserProfile()
   @UseInterceptors(FileInterceptor('file'))
   async updateUserProfile(
-    @Req() req,
+    @Req() req: RequestWithUserData,
     @Body() profileData: UpdateUserProfileDto,
     @UploadedFile() file: Express.Multer.File
   ) {
@@ -51,14 +53,14 @@ export class UserController {
   @Delete('/delete')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiDeleteUser()
-  async deleteUser(@Req() req) {
+  async deleteUser(@Req() req: RequestWithUserData) {
     return this.commandBus.execute(new DeleteUserCommand({ id: req.user.id }));
   }
 
   @Get('/profile')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiGetUserProfile()
-  async getUserProfile(@Req() req, @Res() res) {
+  async getUserProfile(@Req() req: RequestWithUserData, @Res() res: Response) {
     const userProfile = await this.commandBus.execute(
       new GetUserProfileCommand({ id: req.user.id })
     );

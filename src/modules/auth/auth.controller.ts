@@ -11,10 +11,12 @@ import {
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
 import { RecaptchaGuard } from '../../infra/guards/recaptcha.guard';
 import { RefreshAuthGuard } from '../../infra/guards/refresh-auth.guard';
+import { RequestWithUserData } from '../../infra/types/RequestWithUserData';
 import { CreateUserDto } from '../user/dto/create.dto';
 
 import { AuthService } from './auth.service';
@@ -82,11 +84,14 @@ export class AuthController {
 
   @UseGuards(RefreshAuthGuard)
   @Get('/refresh-token')
-  async refreshTokens(@Req() req, @Res({ passthrough: true }) res) {
+  async refreshTokens(
+    @Req() req: RequestWithUserData,
+    @Res({ passthrough: true }) res: Response
+  ) {
     const newAuthToken = await this.authService.refreshAccessToken(req);
     res.cookie('Authorization', newAuthToken, {
       httpOnly: true,
-      sameSite: 'None',
+      sameSite: 'none',
       secure: true
     });
     res
@@ -98,11 +103,11 @@ export class AuthController {
   @ApiAuthorization()
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async login(@Req() req, @Res() res) {
+  async login(@Req() req: RequestWithUserData, @Res() res: Response) {
     const authToken = await this.authService.login(req.user);
     res.cookie('Authorization', authToken, {
       httpOnly: true,
-      sameSite: 'None',
+      sameSite: 'none',
       secure: true
     });
     res
@@ -112,10 +117,10 @@ export class AuthController {
 
   @Post('/logout')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(@Res() res) {
+  async logout(@Res() res: Response) {
     res.cookie('Authorization', null, {
       httpOnly: true,
-      sameSite: 'None',
+      sameSite: 'none',
       secure: true
     });
     res.sendStatus(200);
