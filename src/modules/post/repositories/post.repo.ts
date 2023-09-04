@@ -41,9 +41,11 @@ export class PostsRepo {
     }
   }
 
-  async findAll(userId) {
+  async findAll(userId, take, skip) {
     try {
       return this.prisma.post.findMany({
+        skip: skip,
+        take: take,
         where: { userId }
       });
     } catch (error) {

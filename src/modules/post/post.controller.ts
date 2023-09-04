@@ -5,6 +5,7 @@ import {
   Get,
   Patch,
   Post,
+  Query,
   Req,
   UploadedFiles,
   UseGuards,
@@ -25,6 +26,7 @@ import {
 } from '../auth/auth.swagger';
 
 import { CreatePostDto } from './dto/create-post.dto';
+import { PaginationQuerryPostsDto } from './dto/paginationQuerryPosts.dto';
 import { UpdatePostInDB } from './dto/update-post.dto';
 import { CreatePostCommand } from './use-case/create.post.use-case';
 import { DeletePostCommand } from './use-case/delete.post.use-case';
@@ -59,8 +61,13 @@ export class PostController {
 
   @ApiGetPosts()
   @Get('all')
-  findAll(@Req() req: RequserWithUser) {
-    return this.commandBus.execute(new FindPostsCommand(req.user.id));
+  findAll(
+    @Req() req: RequserWithUser,
+    @Query() query: PaginationQuerryPostsDto
+  ) {
+    return this.commandBus.execute(
+      new FindPostsCommand({ query: query, userId: req.user.id })
+    );
   }
 
   @ApiGetPost()
