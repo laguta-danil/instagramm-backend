@@ -55,7 +55,6 @@ model PasswordRecovery {
 
 model Post {
   id             String     @id @default(uuid())
-  title          String
   description    String
   likes          Int?       @default(0)
   share          String[]
