@@ -17,16 +17,21 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
 
   async execute({ dto, files }: UpdatePostCommand) {
     const { id } = dto;
-    const imageUrls = await Promise.all(
-      files.map(async (image: any) => {
-        const url: any = await this.awsS3Service.uploadFile(image);
+    if (files) {
+      const imageUrls = await Promise.all(
+        files.map(async (image: any) => {
+          const url: any = await this.awsS3Service.uploadFile(image);
 
-        return url.Location;
-      })
-    );
+          return url.Location;
+        })
+      );
+      await this.postsRepo.updatePost(id, {
+        ...dto,
+        image: imageUrls
+      });
+    }
     await this.postsRepo.updatePost(id, {
-      ...dto,
-      image: imageUrls
+      ...dto
     });
   }
 }
