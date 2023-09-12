@@ -17,7 +17,7 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
 
   async execute({ dto, files }: UpdatePostCommand) {
     const { id } = dto;
-    if (files) {
+    if (files.length !== undefined) {
       const imageUrls = await Promise.all(
         files.map(async (image: any) => {
           const url: any = await this.awsS3Service.uploadFile(image);
