@@ -30,6 +30,10 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
         image: imageUrls
       });
     }
-    await this.postsRepo.updatePost(id, dto);
+    const oldPost = await this.postsRepo.findPostById(id, dto.userId);
+    await this.postsRepo.updatePost(id, {
+      ...dto,
+      image: oldPost.image
+    });
   }
 }
