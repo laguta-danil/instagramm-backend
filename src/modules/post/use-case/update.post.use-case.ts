@@ -30,8 +30,6 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
         image: imageUrls
       });
     }
-    await this.postsRepo.updatePost(id, {
-      ...dto
-    });
+    await this.postsRepo.updatePost(id, dto);
   }
 }

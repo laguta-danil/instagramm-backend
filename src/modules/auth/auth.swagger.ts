@@ -187,8 +187,7 @@ export function ApiUpdatePost() {
           id: {
             example: '72f5b68e-6843-4cb3-b119-05e6a75d1b3f',
             type: 'string'
-          },
-          title: { example: 'Title of post', type: 'string' }
+          }
         },
         type: 'object'
       }
@@ -236,8 +235,7 @@ export function ApiCreatePost() {
           files: {
             format: 'binary',
             type: 'string'
-          },
-          title: { example: 'Title of post', type: 'string' }
+          }
         },
         type: 'object'
       }
