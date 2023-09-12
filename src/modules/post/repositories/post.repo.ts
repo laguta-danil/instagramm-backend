@@ -41,9 +41,10 @@ export class PostsRepo {
     }
   }
 
-  async findAll(userId, take, skip) {
+  async findAll(userId: string, take: number, skip: number, order) {
     try {
       return this.prisma.post.findMany({
+        orderBy: { createdAt: order },
         skip: skip,
         take: take,
         where: { userId }

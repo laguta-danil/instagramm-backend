@@ -1,8 +1,8 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { AwsS3Service } from '../../aws/aws.service';
-import { UsersRepo } from '../repositories/user.repo';
 import { UpdateUserProfileDto } from '../dto/create.dto';
+import { UsersRepo } from '../repositories/user.repo';
 
 export class UpdateUserProfileCommand {
   constructor(
@@ -26,8 +26,10 @@ export class UpdateUserProfileUseCase
   async execute({ dto }: UpdateUserProfileCommand) {
     const { id } = dto;
     const { file } = dto;
-    const fileData = await this.awsS3ProfileBucket.uploadFile(file);
-    dto.profileData.photo = fileData.Location;
+    if (file) {
+      const fileData = await this.awsS3ProfileBucket.uploadFile(file);
+      dto.profileData.photo = fileData.Location;
+    }
 
     return this.usersRepo.updateUserProfile(id, dto.profileData);
   }

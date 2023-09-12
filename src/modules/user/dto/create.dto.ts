@@ -89,26 +89,29 @@ export class UpdateUserProfileDto {
   @IsString()
   lastName: string;
 
+  @IsOptional()
   @ApiProperty({
     description: 'Lastname',
     example: '2022-04-23T10:25:43.511Z'
   })
   @IsString()
-  birthdayDate: string;
+  birthdayDate?: string;
 
+  @IsOptional()
   @ApiProperty({
     description: 'City Name',
     example: 'New york'
   })
   @IsString()
-  city: string;
+  city?: string;
 
+  @IsOptional()
   @ApiProperty({
     description: 'About me',
     example: 'About me'
   })
   @IsString()
-  aboutMe: string;
+  aboutMe?: string;
 
   @IsOptional()
   @IsUrl()

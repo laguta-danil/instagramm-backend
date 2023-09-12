@@ -23,7 +23,8 @@ export class CreatePostUseCase implements ICommandHandler<CreatePostCommand> {
         return url.Location;
       })
     );
-    await this.postsRepo.createPost({
+
+    return this.postsRepo.createPost({
       ...dto,
       image: imageUrls
     });

@@ -54,7 +54,7 @@ export class PostController {
           ...dto,
           userId: req.user.id
         },
-        files
+        files || null
       )
     );
   }

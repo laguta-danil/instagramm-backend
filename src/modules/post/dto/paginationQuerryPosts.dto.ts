@@ -6,4 +6,7 @@ export class PaginationQuerryPostsDto {
 
   @IsString()
   itemsPerPage: string;
+
+  @IsString()
+  order: string;
 }

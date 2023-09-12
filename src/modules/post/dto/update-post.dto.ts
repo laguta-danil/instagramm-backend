@@ -9,7 +9,7 @@ export class UpdatePostDto extends CreatePostDto {
 }
 
 export class CreatePostInDB extends UpdatePostDto {
-  image: string[];
+  image?: string[] | null;
 }
 
 export class UpdatePostInDB extends UpdatePostDto {

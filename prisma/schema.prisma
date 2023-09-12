@@ -54,14 +54,16 @@ model PasswordRecovery {
 }
 
 model Post {
-  id             String   @id @default(uuid())
+  id             String     @id @default(uuid())
   title          String
   description    String
-  likes          Int?     @default(0)
+  likes          Int?       @default(0)
   share          String[]
   image          String[]
-  author         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         String   @map("user_id")
+  author         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String     @map("user_id")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at")
 
   @@map("users_post")
 }
