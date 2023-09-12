@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { AwsS3Service } from '../../aws/aws.service';
@@ -16,8 +17,10 @@ export class UpdatePostUseCase implements ICommandHandler<UpdatePostCommand> {
   ) {}
 
   async execute({ dto, files }: UpdatePostCommand) {
+    const logger = new Logger();
     const { id } = dto;
-    if (files.length !== undefined) {
+    if (files.length === 0) {
+      logger.log(files);
       const imageUrls = await Promise.all(
         files.map(async (image: any) => {
           const url: any = await this.awsS3Service.uploadFile(image);
