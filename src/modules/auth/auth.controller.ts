@@ -90,9 +90,9 @@ export class AuthController {
   ) {
     const newAuthToken = await this.authService.refreshAccessToken(req);
     res.cookie('Authorization', newAuthToken, {
-      httpOnly: true
-      // sameSite: 'none',
-      // secure: true
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true
     });
     res
       .status(200)
@@ -106,9 +106,9 @@ export class AuthController {
   async login(@Req() req: RequestWithUserData, @Res() res: Response) {
     const authToken = await this.authService.login(req.user);
     res.cookie('Authorization', authToken, {
-      httpOnly: true
-      // sameSite: 'none',
-      // secure: true
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true
     });
     res
       .status(200)
@@ -119,9 +119,9 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Res() res: Response) {
     res.cookie('Authorization', null, {
-      httpOnly: true
-      // sameSite: 'none',
-      // secure: true
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true
     });
     res.sendStatus(200);
   }
