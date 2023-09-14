@@ -15,7 +15,7 @@ export class PostsRepo {
 
   async findPostById(id: string, userId: string) {
     try {
-      return this.prisma.post.findFirst({
+      return await this.prisma.post.findFirst({
         where: { id: id, userId: userId }
       });
     } catch (e) {

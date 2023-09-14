@@ -72,8 +72,8 @@ export class PostController {
 
   @ApiGetPost()
   @Get()
-  findOne(@Req() req: RequserWithUser, @Body() body: { id: string }) {
-    return this.commandBus.execute(new FindPostCommand(body.id, req.user.id));
+  findOne(@Req() req: RequserWithUser, @Query() querry: { id: string }) {
+    return this.commandBus.execute(new FindPostCommand(querry.id, req.user.id));
   }
 
   @ApiUpdatePost()

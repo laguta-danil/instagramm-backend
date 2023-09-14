@@ -123,6 +123,6 @@ export class AuthController {
       sameSite: 'none',
       secure: true
     });
-    res.sendStatus(200);
+    res.status(200).json({ message: 'Success' });
   }
 }
