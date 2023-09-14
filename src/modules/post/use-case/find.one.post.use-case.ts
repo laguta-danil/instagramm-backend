@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { PostsRepo } from '../repositories/post.repo';
@@ -11,6 +12,12 @@ export class FindPostUseCase implements ICommandHandler<FindPostCommand> {
   constructor(private postsRepo: PostsRepo) {}
 
   async execute({ id, userId }: FindPostCommand) {
-    return this.postsRepo.findPostById(id, userId);
+    if (id && userId) {
+      return this.postsRepo.findPostById(id, userId);
+    }
+    throw new HttpException(
+      { message: 'Post id or userId is empty' },
+      HttpStatus.BAD_REQUEST
+    );
   }
 }

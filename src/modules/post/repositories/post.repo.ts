@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../../database/prisma.service';
 import { CreatePostInDB } from '../dto/update-post.dto';
@@ -14,9 +14,16 @@ export class PostsRepo {
   }
 
   async findPostById(id: string, userId: string) {
-    return this.prisma.post.findFirst({
-      where: { id: id, userId: userId }
-    });
+    try {
+      return this.prisma.post.findFirst({
+        where: { id: id, userId: userId }
+      });
+    } catch (e) {
+      throw new HttpException(
+        { message: 'Post do not find' },
+        HttpStatus.BAD_REQUEST
+      );
+    }
   }
 
   async updatePost(id, data) {
