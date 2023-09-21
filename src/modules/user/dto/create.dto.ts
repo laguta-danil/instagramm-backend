@@ -70,7 +70,7 @@ export class CreateUserServiceDto extends CreateUserDto {}
 
 export class CreateUserDbDto {
   readonly email: string;
-  readonly login: string;
+  readonly login?: string;
   readonly passwordHash: string;
 }
 

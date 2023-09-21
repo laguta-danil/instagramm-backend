@@ -4,6 +4,8 @@ import * as bcrypt from 'bcrypt';
 import { ApiJwtService } from '../jwt/apiJwt.services';
 import { UsersRepo } from '../user/repositories/user.repo';
 
+import { GoogleUserDto } from './dto/google.user.dto';
+
 interface Info {
   expirationDate: Date;
   isConfirmed: boolean;
@@ -36,9 +38,9 @@ export class AuthService {
     return !!isPasswordMatching;
   }
 
-  public getJwtTokens(id: string) {
-    return this.apiJwtService.createJWT(id);
-  }
+  // private getJwtTokens(id: string) {
+  //   return this.apiJwtService.createJWT(id);
+  // }
 
   private async updateRefreshTokenInUserRep(
     userId: string,
@@ -53,7 +55,7 @@ export class AuthService {
   async login(data) {
     const user = await this.usersRepo.findById(data.id);
     if (user) {
-      const tokens = await this.getJwtTokens(data.id);
+      const tokens = await this.apiJwtService.createJWT(data.id);
       await this.updateRefreshTokenInUserRep(data.id, tokens.refreshToken);
 
       return tokens;
@@ -77,6 +79,21 @@ export class AuthService {
       { message: 'Refresh token expired' },
       HttpStatus.BAD_REQUEST
     );
+  }
+
+  async googleAuth(userData: GoogleUserDto) {
+    try {
+      const user = await this.usersRepo.checkUserByEmail(userData.email);
+
+      return this.apiJwtService.createJWT(user.id);
+    } catch (e) {
+      const newUser = await this.usersRepo.createUser({
+        email: userData.email,
+        passwordHash: 'test'
+      });
+
+      return this.apiJwtService.createJWT(newUser.id);
+    }
   }
 
   public checkAuthCode(info: Info) {

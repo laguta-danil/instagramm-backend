@@ -129,22 +129,19 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(GoogleOauthGuard)
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async auth() {
-    console.log('text');
-  }
+  async auth() {}
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleAuthCallback(@Req() req, @Res() res: Response) {
-    const token = await this.authService.login(req.user);
+    const token = await this.authService.googleAuth(req.user);
 
-    res.cookie('access_token', token, {
+    res.cookie('Authorization', token, {
       maxAge: 2592000000,
-      sameSite: true,
+      sameSite: 'none',
       secure: false
     });
 
-    return res.status(HttpStatus.OK);
+    return res.redirect('https://inst-project.vercel.app/profile');
   }
 }
