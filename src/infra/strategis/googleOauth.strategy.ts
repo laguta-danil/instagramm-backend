@@ -6,7 +6,7 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth2';
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     super({
-      callbackURL: 'http://localhost:5000/auth/google/redirect',
+      callbackURL: 'https://instagramm-backend.vercel.app/auth/google/callback',
       clientID:
         '913313577717-cbjosvfjdvf9ntcqv115senspptvmp0s.apps.googleusercontent.com',
       clientSecret: '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',
