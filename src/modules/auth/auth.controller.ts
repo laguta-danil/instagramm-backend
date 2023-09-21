@@ -13,6 +13,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
+import { GoogleOauthGuard } from '../../infra/guards/googleOauth.guard';
 import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
 import { RecaptchaGuard } from '../../infra/guards/recaptcha.guard';
 import { RefreshAuthGuard } from '../../infra/guards/refresh-auth.guard';
@@ -124,5 +125,12 @@ export class AuthController {
       secure: true
     });
     res.status(200).json({ message: 'Success' });
+  }
+
+  @Get('google')
+  @UseGuards(GoogleOauthGuard)
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async auth() {
+    console.log('text');
   }
 }
