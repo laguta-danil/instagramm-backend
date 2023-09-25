@@ -13,7 +13,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
-import { GoogleOauthGuard } from '../../infra/guards/googleOauth.guard';
+import { OAuth2Guard } from '../../infra/guards/googleOauth.guard';
 import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
 import { RecaptchaGuard } from '../../infra/guards/recaptcha.guard';
 import { RefreshAuthGuard } from '../../infra/guards/refresh-auth.guard';
@@ -127,21 +127,19 @@ export class AuthController {
     res.status(200).json({ message: 'Success' });
   }
 
-  @Get('google')
-  @UseGuards(GoogleOauthGuard)
-  async auth() {}
+  @Get('google-auth')
+  @UseGuards(OAuth2Guard)
+  async oAuth2(@Body() body, @Res() res) {
+    console.log(body.user, 'test request');
 
-  @Get('google/callback')
-  @UseGuards(GoogleOauthGuard)
-  async googleAuthCallback(@Req() req, @Res() res: Response) {
-    const token = await this.authService.googleAuth(req.user);
-
-    res.cookie('Authorization', token, {
-      maxAge: 2592000000,
+    const authToken = await this.authService.oAuth2(body.user);
+    res.cookie('Authorization', authToken, {
+      httpOnly: true,
       sameSite: 'none',
-      secure: false
+      secure: true
     });
-
-    return res.redirect('https://inst-project.vercel.app/profile');
+    res
+      .status(200)
+      .send({ accessToken: authToken.accessToken, message: 'Success' });
   }
 }

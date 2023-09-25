@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
@@ -9,7 +10,6 @@ import { IsValidConfirmCode } from '../../infra/decorator/auth/is.valid.confirm.
 import { IsValidRecoveryCode } from '../../infra/decorator/auth/is.valid.recovery.code';
 import { IsValidResendingCode } from '../../infra/decorator/auth/is.valid.resending.code';
 import { ExistUserByLoginOrEmail } from '../../infra/decorator/user/exist.user.by.login-email';
-import { GoogleStrategy } from '../../infra/strategis/googleOauth.strategy';
 import { RefreshTokenStrategy } from '../../infra/strategis/jwt-refresh.strategy';
 import { JwtStrategy } from '../../infra/strategis/jwt.strategy';
 import { LocalStrategy } from '../../infra/strategis/local.strategy';
@@ -31,7 +31,8 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     EventEmitterModule.forRoot(),
     CqrsModule,
     PassportModule,
-    ApiJwtModule
+    ApiJwtModule,
+    HttpModule
   ],
   providers: [
     // service
@@ -54,8 +55,7 @@ import { ResendingUseCase } from './use-case/resending.use-case';
     // guards
     LocalStrategy,
     JwtStrategy,
-    RefreshTokenStrategy,
-    GoogleStrategy
+    RefreshTokenStrategy
   ]
 })
 export class AuthModule {}

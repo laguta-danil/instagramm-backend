@@ -1,10 +1,9 @@
+import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { ApiJwtService } from '../jwt/apiJwt.services';
 import { UsersRepo } from '../user/repositories/user.repo';
-
-import { GoogleUserDto } from './dto/google.user.dto';
 
 interface Info {
   expirationDate: Date;
@@ -15,7 +14,8 @@ interface Info {
 export class AuthService {
   constructor(
     private usersRepo: UsersRepo,
-    private apiJwtService: ApiJwtService
+    private apiJwtService: ApiJwtService,
+    private httpSevice: HttpService
   ) {}
 
   public async validateUser(email: string, password: string) {
@@ -81,7 +81,7 @@ export class AuthService {
     );
   }
 
-  async googleAuth(userData: GoogleUserDto) {
+  async oAuth2(userData: any) {
     try {
       const user = await this.usersRepo.checkUserByEmail(userData.email);
 
@@ -89,7 +89,7 @@ export class AuthService {
     } catch (e) {
       const newUser = await this.usersRepo.createUser({
         email: userData.email,
-        passwordHash: 'test'
+        passwordHash: Math.random().toString()
       });
 
       return this.apiJwtService.createJWT(newUser.id);
