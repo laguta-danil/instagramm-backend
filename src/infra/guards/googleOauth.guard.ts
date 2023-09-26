@@ -9,22 +9,14 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom, map } from 'rxjs';
 
-// interface Inter {
-
-// }
-
 @Injectable()
 export class OAuth2Guard implements CanActivate {
-  private token: string;
-
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService
   ) {
-    // this.recaptchaSecret = this.configService.get(EnvEnum.RECAPTCHA_SECRET);
+    // this.configService.get(EnvEnum.GOOGLE_AUTH_API);
   }
-
-  header = { headers: { 'Content-Type': 'application/json' } };
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const { query, body }: { query: { token: string }; body: any } = context
@@ -36,7 +28,7 @@ export class OAuth2Guard implements CanActivate {
         this.httpService
           .get(
             `https://oauth2.googleapis.com/tokeninfo?id_token=${query.token}`,
-            this.header
+            { headers: { 'Content-Type': 'application/json' } }
           )
           .pipe(map(res => res.data))
       );

@@ -13,6 +13,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
+import { GitHubOAuthGuard } from '../../infra/guards/gihub-oauth.guard';
 import { OAuth2Guard } from '../../infra/guards/googleOauth.guard';
 import { LocalAuthGuard } from '../../infra/guards/local-auth.guard';
 import { RecaptchaGuard } from '../../infra/guards/recaptcha.guard';
@@ -127,12 +128,24 @@ export class AuthController {
     res.status(200).json({ message: 'Success' });
   }
 
-  @Get('google-auth')
+  @Get('google')
   @UseGuards(OAuth2Guard)
   async oAuth2(@Body() body, @Res() res) {
-    console.log(body.user, 'test request');
+    const authToken = await this.authService.googleAuth(body.user);
+    res.cookie('Authorization', authToken, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true
+    });
+    res
+      .status(200)
+      .send({ accessToken: authToken.accessToken, message: 'Success' });
+  }
 
-    const authToken = await this.authService.oAuth2(body.user);
+  @Get('github')
+  @UseGuards(GitHubOAuthGuard)
+  async ghAuth(@Body() body, @Res() res) {
+    const authToken = await this.authService.gitHubAuth(body.user);
     res.cookie('Authorization', authToken, {
       httpOnly: true,
       sameSite: 'none',

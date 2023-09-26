@@ -81,7 +81,7 @@ export class AuthService {
     );
   }
 
-  async oAuth2(userData: any) {
+  async googleAuth(userData: any) {
     try {
       const user = await this.usersRepo.checkUserByEmail(userData.email);
 
@@ -89,7 +89,23 @@ export class AuthService {
     } catch (e) {
       const newUser = await this.usersRepo.createUser({
         email: userData.email,
-        passwordHash: Math.random().toString()
+        passwordHash: 'password'
+      });
+
+      return this.apiJwtService.createJWT(newUser.id);
+    }
+  }
+
+  async gitHubAuth(userData: any) {
+    console.log(userData);
+    try {
+      const user = await this.usersRepo.checkUserByEmail(userData.email);
+
+      return this.apiJwtService.createJWT(user.id);
+    } catch (e) {
+      const newUser = await this.usersRepo.createUser({
+        email: userData.email,
+        passwordHash: 'password'
       });
 
       return this.apiJwtService.createJWT(newUser.id);
