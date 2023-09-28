@@ -97,7 +97,6 @@ export class AuthService {
   }
 
   async gitHubAuth(userData: any) {
-    console.log(userData);
     try {
       const user = await this.usersRepo.checkUserByEmail(userData.email);
 

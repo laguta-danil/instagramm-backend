@@ -128,7 +128,7 @@ export class AuthController {
     res.status(200).json({ message: 'Success' });
   }
 
-  @Get('google')
+  @Post('google')
   @UseGuards(OAuth2Guard)
   async oAuth2(@Body() body, @Res() res) {
     const authToken = await this.authService.googleAuth(body.user);
@@ -142,7 +142,7 @@ export class AuthController {
       .send({ accessToken: authToken.accessToken, message: 'Success' });
   }
 
-  @Get('github')
+  @Post('github')
   @UseGuards(GitHubOAuthGuard)
   async ghAuth(@Body() body, @Res() res) {
     const authToken = await this.authService.gitHubAuth(body.user);
