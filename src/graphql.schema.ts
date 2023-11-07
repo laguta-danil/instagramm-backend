@@ -28,7 +28,7 @@ export abstract class ISubscription {
 }
 
 export class Owner {
-    id: number;
+    id: string;
     name: string;
     age?: Nullable<number>;
     users?: Nullable<User[]>;
