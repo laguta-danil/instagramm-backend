@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import cookieParser from 'cookie-parser';
+import csurf from 'csurf';
 
 import { AppModule } from '../app.module';
 import { HttpExceptionFilter } from '../infra/exception-filter/http.exception.filter';
@@ -19,6 +20,8 @@ export const initApp = (app: INestApplication): INestApplication => {
   app.useGlobalPipes(GlobalValidationPipe);
 
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.use(csurf());
 
   SwaggerConfig.create(app);
 
