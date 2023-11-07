@@ -3,7 +3,10 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["**/*.hbs"],
+    "assets": [
+      "**/*.hbs",
+      "**/*.graphql"
+    ],
     "watchAssets": true,
     "deleteOutDir": true
   }

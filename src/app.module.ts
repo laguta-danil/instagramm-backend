@@ -1,6 +1,8 @@
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +20,12 @@ import { UserModule } from './modules/user/user.module';
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     MailerModule.forRootAsync({ useClass: MailerConfig }),
+    // graphQL
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      installSubscriptionHandlers: true,
+      typePaths: ['./**/*.graphql']
+    }),
     // db
     DatabaseModule,
     // modules
