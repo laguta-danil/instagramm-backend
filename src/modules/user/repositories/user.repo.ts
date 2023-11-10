@@ -148,4 +148,12 @@ export class UsersRepo {
       return error;
     }
   }
+
+  async getAllUsers(take, skip, search) {
+    return this.prisma.user.findMany({
+      skip: skip,
+      take: take,
+      where: { email: { contains: `${search}`, mode: 'insensitive' } }
+    });
+  }
 }

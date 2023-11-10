@@ -27,6 +27,7 @@ model User {
   usersConfirmEmail UsersConfirmEmail?
   passwordRecovery  PasswordRecovery?
   posts             Post[]
+  role              String             @default("User")
 
   @@map("user")
 }
