@@ -8,8 +8,10 @@ export class UserService {
   constructor(private usersRepo: UsersRepo) {}
 
   public async getAllUsers(userId, page, itemsPerPage, search) {
-    const take = +itemsPerPage || 10;
+    const take = +itemsPerPage || 16;
     const skip = (+page - 1) * +itemsPerPage || 0;
+    console.log(search, ' s');
+    search = search ? search : '';
     try {
       const user = await this.usersRepo.findById(userId);
       if (user.role === 'Admin') {

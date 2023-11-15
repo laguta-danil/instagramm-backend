@@ -28,6 +28,7 @@ model User {
   passwordRecovery  PasswordRecovery?
   posts             Post[]
   role              String             @default("User")
+  isUserBlocked     Boolean            @default(false)
 
   @@map("user")
 }

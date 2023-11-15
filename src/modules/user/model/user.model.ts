@@ -61,4 +61,7 @@ export class User2 implements UserClient {
 
   @Field(() => String)
   role: string;
+
+  @Field(() => Boolean)
+  isUserBlocked: boolean;
 }

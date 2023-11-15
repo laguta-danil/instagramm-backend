@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -19,14 +18,9 @@ import { Response } from 'express';
 
 import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
 import { RequestWithUserData } from '../../infra/types/RequestWithUserData';
-import {
-  ApiDeleteUser,
-  ApiGetUserProfile,
-  ApiUpdateUserProfile
-} from '../auth/auth.swagger';
+import { ApiGetUserProfile, ApiUpdateUserProfile } from '../auth/auth.swagger';
 
 import { UpdateUserProfileDto } from './dto/create.dto';
-import { DeleteUserCommand } from './use-case/delete.user.use-case';
 import { GetUserProfileCommand } from './use-case/get.user.profile.use-case';
 import { UpdateUserProfileCommand } from './use-case/update.user.profile.use-case';
 
@@ -50,12 +44,12 @@ export class UserController {
     );
   }
 
-  @Delete('/delete')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiDeleteUser()
-  async deleteUser(@Req() req: RequestWithUserData) {
-    return this.commandBus.execute(new DeleteUserCommand({ id: req.user.id }));
-  }
+  // @Delete('/delete')
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // @ApiDeleteUser()
+  // async deleteUser(@Req() req: RequestWithUserData) {
+  //   return this.commandBus.execute(new DeleteUserCommand({ id: req.user.id }));
+  // }
 
   @Get('/profile')
   @HttpCode(HttpStatus.NO_CONTENT)

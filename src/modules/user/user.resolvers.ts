@@ -1,6 +1,7 @@
 import { CommandBus } from '@nestjs/cqrs';
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -22,9 +23,10 @@ export class UserResolver {
   @Query(() => [User2])
   async getAllUsers(
     @Args('userId', { type: () => String }) userId: string,
-    @Args('page', { type: () => Number }) page: number,
-    @Args('itemsPerPage', { type: () => Number }) itemsPerPage: number,
-    @Args('search', { type: () => String }) search: string
+    @Args('page', { nullable: true, type: () => Int }) page: number,
+    @Args('itemsPerPage', { nullable: true, type: () => Int })
+    itemsPerPage: number,
+    @Args('search', { nullable: true, type: () => String }) search: string
   ) {
     return this.userService.getAllUsers(userId, page, itemsPerPage, search);
   }
@@ -36,7 +38,7 @@ export class UserResolver {
     return this.userService.getUserById(id);
   }
 
-  @Query(() => User2)
+  @Mutation(() => User2)
   async deleteUser(@Args('id', { type: () => String }) id: string) {
     return this.commandBus.execute(new DeleteUserCommand({ id: id }));
   }
