@@ -2,7 +2,6 @@ import { UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   Args,
-  Context,
   Int,
   Mutation,
   Parent,
@@ -12,6 +11,7 @@ import {
 } from '@nestjs/graphql';
 
 import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
+import { JwtAuthGQLGuard } from '../../infra/strategis/jwtGQL.strategy';
 
 import { User2, Users } from './model/user.model';
 import { DeleteUserCommand } from './use-case/delete.user.use-case';
@@ -24,7 +24,7 @@ export class UserResolver {
     private commandBus: CommandBus
   ) {}
 
-  // @UseGuards(JwtAuthGQLGuard)
+  @UseGuards(JwtAuthGQLGuard)
   @Query(() => Users)
   async getAllUsers(
     @Args('page', { nullable: true, type: () => Int }) page: number,
@@ -34,12 +34,8 @@ export class UserResolver {
     @Args('sortByCreateDate', { nullable: true, type: () => String })
     sortByCreateDate: string,
     @Args('sortByUserName', { nullable: true, type: () => String })
-    sortByUserName: string,
-    @Context('req') req: Express.Request
+    sortByUserName: string
   ) {
-    // @ts-ignore
-    console.log(req.cookies);
-
     return this.userService.getAllUsers(
       page,
       itemsPerPage,

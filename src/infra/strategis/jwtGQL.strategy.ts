@@ -1,23 +1,29 @@
 import { UserInputError } from '@nestjs/apollo';
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException
-} from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
+import { ExtractJwt } from 'passport-jwt';
 
 import { UsersRepo } from '../../modules/user/repositories/user.repo';
+import { EnvEnum } from '../../utils/env.enum';
+
+const { JWT_SECRET } = EnvEnum;
 
 @Injectable()
 export class JwtAuthGQLGuard extends AuthGuard('jwt') {
-  constructor(private usersRepo: UsersRepo) {
-    super();
+  constructor(
+    private usersRepo: UsersRepo,
+    private configService: ConfigService
+  ) {
+    super({
+      ignoreExpiration: false,
+      jwtFromRequest: ExtractJwt.fromExtractors([]),
+      secretOrKey: configService.get<string>(JWT_SECRET)
+    });
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const a: any = this.getRequest(context);
-    console.log(a);
     try {
       return (await super.canActivate(context)) as boolean;
     } catch (e) {
@@ -31,14 +37,5 @@ export class JwtAuthGQLGuard extends AuthGuard('jwt') {
     const { req, connection } = ctx.getContext();
 
     return connection?.context?.headers ? connection.context : req;
-  }
-
-  async validate(payload: { id: string }) {
-    const user = await this.usersRepo.findById(payload.id);
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return { email: user.email, id: user.id, login: user.login };
   }
 }

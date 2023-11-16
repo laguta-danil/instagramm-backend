@@ -28,7 +28,11 @@ import { UserService } from './user.service';
       csrfPrevention: false,
       driver: ApolloDriver,
       introspection: true,
-      playground: true
+      playground: {
+        settings: {
+          'request.credentials': 'include' // Otherwise cookies won't be sent
+        }
+      }
       // installSubscriptionHandlers: true
       // typePaths: ['./**/*.graphql']
     })

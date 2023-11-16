@@ -31,8 +31,8 @@ export class RefreshTokenStrategy extends PassportStrategy(
 
   private static extractJWTFromCookie(req: RequestType): string | null {
     try {
-      if (req.cookies && 'refreshToken' in req.cookies.Authorization) {
-        return req.cookies.Authorization.refreshToken;
+      if (req.cookies && 'refreshToken' in req.cookies.authorization) {
+        return req.cookies.authorization.refreshToken;
       }
     } catch (error) {
       throw new HttpException(

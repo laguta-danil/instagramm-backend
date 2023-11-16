@@ -30,13 +30,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   private static extractJWTFromCookie(req: Request): string | null {
-    console.log(req.cookies);
     try {
       if (
-        req.cookies.Authorization &&
-        'accessToken' in req.cookies.Authorization
+        req.cookies.authorization &&
+        'accessToken' in req.cookies.authorization
       ) {
-        return req.cookies.Authorization.accessToken;
+        return req.cookies.authorization.accessToken;
       }
     } catch (error) {
       throw new HttpException(
@@ -51,9 +50,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: { id: string }) {
     const user = await this.usersRepo.findById(payload.id);
     if (!user) {
+      // return true;
       throw new UnauthorizedException();
     }
 
     return { email: user.email, id: user.id, login: user.login };
+    // return true;
   }
 }
