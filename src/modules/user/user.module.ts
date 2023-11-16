@@ -21,6 +21,10 @@ import { UserService } from './user.service';
     CqrsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
+      context: ({ req, reply }) => ({
+        req,
+        response: reply
+      }),
       csrfPrevention: false,
       driver: ApolloDriver,
       introspection: true,

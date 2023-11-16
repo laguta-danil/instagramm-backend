@@ -91,7 +91,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response
   ) {
     const newAuthToken = await this.authService.refreshAccessToken(req);
-    res.cookie('Authorization', newAuthToken, {
+    res.cookie('authorization', newAuthToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: true
@@ -107,7 +107,7 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async login(@Req() req: RequestWithUserData, @Res() res: Response) {
     const authToken = await this.authService.login(req.user);
-    res.cookie('Authorization', authToken, {
+    res.cookie('authorization', authToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: true
@@ -120,7 +120,7 @@ export class AuthController {
   @Post('/logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Res() res: Response) {
-    res.cookie('Authorization', null, {
+    res.cookie('authorization', null, {
       httpOnly: true,
       sameSite: 'none',
       secure: true
@@ -132,7 +132,7 @@ export class AuthController {
   @UseGuards(OAuth2Guard)
   async oAuth2(@Body() body, @Res() res) {
     const authToken = await this.authService.googleAuth(body.user);
-    res.cookie('Authorization', authToken, {
+    res.cookie('authorization', authToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: true
@@ -146,7 +146,7 @@ export class AuthController {
   @UseGuards(GitHubOAuthGuard)
   async ghAuth(@Body() body, @Res() res) {
     const authToken = await this.authService.gitHubAuth(body.user);
-    res.cookie('Authorization', authToken, {
+    res.cookie('authorization', authToken, {
       httpOnly: true,
       sameSite: 'none',
       secure: true

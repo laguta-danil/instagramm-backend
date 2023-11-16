@@ -7,20 +7,26 @@ import { UsersRepo } from './repositories/user.repo';
 export class UserService {
   constructor(private usersRepo: UsersRepo) {}
 
-  public async getAllUsers(userId, page, itemsPerPage, search) {
+  public async getAllUsers(
+    page,
+    itemsPerPage,
+    search,
+    sortByCreateDate,
+    sortByUserName
+  ) {
     const take = +itemsPerPage || 16;
     const skip = (+page - 1) * +itemsPerPage || 0;
-    console.log(search, ' s');
-    search = search ? search : '';
     try {
-      const user = await this.usersRepo.findById(userId);
-      if (user.role === 'Admin') {
-        return this.usersRepo.getAllUsers(take, skip, search);
-      }
+      return this.usersRepo.getAllUsers(
+        take,
+        skip,
+        search || '',
+        sortByCreateDate,
+        sortByUserName
+      );
     } catch (e) {
       throw new UserInputError(e);
     }
-    throw new UserInputError('You are not administrator');
   }
 
   async createUser(user) {

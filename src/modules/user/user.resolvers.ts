@@ -1,6 +1,8 @@
+import { UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   Args,
+  Context,
   Int,
   Mutation,
   Parent,
@@ -9,7 +11,9 @@ import {
   Resolver
 } from '@nestjs/graphql';
 
-import { User2 } from './model/user.model';
+import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
+
+import { User2, Users } from './model/user.model';
 import { DeleteUserCommand } from './use-case/delete.user.use-case';
 import { UserService } from './user.service';
 
@@ -20,15 +24,29 @@ export class UserResolver {
     private commandBus: CommandBus
   ) {}
 
-  @Query(() => [User2])
+  // @UseGuards(JwtAuthGQLGuard)
+  @Query(() => Users)
   async getAllUsers(
-    @Args('userId', { type: () => String }) userId: string,
     @Args('page', { nullable: true, type: () => Int }) page: number,
     @Args('itemsPerPage', { nullable: true, type: () => Int })
     itemsPerPage: number,
-    @Args('search', { nullable: true, type: () => String }) search: string
+    @Args('search', { nullable: true, type: () => String }) search: string,
+    @Args('sortByCreateDate', { nullable: true, type: () => String })
+    sortByCreateDate: string,
+    @Args('sortByUserName', { nullable: true, type: () => String })
+    sortByUserName: string,
+    @Context('req') req: Express.Request
   ) {
-    return this.userService.getAllUsers(userId, page, itemsPerPage, search);
+    // @ts-ignore
+    console.log(req.cookies);
+
+    return this.userService.getAllUsers(
+      page,
+      itemsPerPage,
+      search,
+      sortByCreateDate,
+      sortByUserName
+    );
   }
 
   @Query(() => User2)
@@ -43,6 +61,7 @@ export class UserResolver {
     return this.commandBus.execute(new DeleteUserCommand({ id: id }));
   }
 
+  @UseGuards(JwtAuthGuard)
   @Mutation(() => User2)
   async getAdminRole(
     @Args('id', { type: () => String }) id: number
@@ -51,7 +70,7 @@ export class UserResolver {
   }
 
   @ResolveField('comment', () => [String])
-  async getMovieComment(@Parent() user: User2) {
+  async getComment(@Parent() user: User2) {
     // call a service to get comments for specific movie, i.e:
     // this.movieCommentService.getAllMovieCommetsByMovieId(id)
     return ['Test1', 'Test2'];

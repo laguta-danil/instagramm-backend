@@ -1,4 +1,4 @@
-import { Field, HideField, ObjectType } from '@nestjs/graphql';
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql';
 import { User as UserClient } from '@prisma/client';
 
 @ObjectType()
@@ -64,4 +64,13 @@ export class User2 implements UserClient {
 
   @Field(() => Boolean)
   isUserBlocked: boolean;
+}
+
+@ObjectType()
+export class Users {
+  @Field(() => [User2], { nullable: true })
+  data?: User2[];
+
+  @Field(() => Int)
+  total: number;
 }

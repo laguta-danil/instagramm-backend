@@ -149,11 +149,20 @@ export class UsersRepo {
     }
   }
 
-  async getAllUsers(take, skip, search) {
-    return this.prisma.user.findMany({
-      skip: skip,
-      take: take,
-      where: { email: { contains: `${search}`, mode: 'insensitive' } }
-    });
+  async getAllUsers(take, skip, search, sortByCreateDate, sortByUserName) {
+    const [users, count] = await this.prisma.$transaction([
+      this.prisma.user.findMany({
+        orderBy: [{ createdAt: sortByCreateDate }, { email: sortByUserName }],
+        skip: skip,
+        take: take,
+        where: { email: { contains: `${search}`, mode: 'insensitive' } }
+      }),
+      this.prisma.user.count()
+    ]);
+
+    return {
+      data: users,
+      total: count
+    };
   }
 }
