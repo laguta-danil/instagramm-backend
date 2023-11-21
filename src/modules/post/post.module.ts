@@ -3,6 +3,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 
 import { PrismaService } from '../../database/prisma.service';
 import { AwsS3Service } from '../aws/aws.service';
+import { UsersRepo } from '../user/repositories/user.repo';
 
 import { PostController } from './post.controller';
 import { PostsRepo } from './repositories/post.repo';
@@ -19,6 +20,7 @@ import { UpdatePostUseCase } from './use-case/update.post.use-case';
     CreatePostUseCase,
     PostsRepo,
     PrismaService,
+    UsersRepo,
     AwsS3Service,
     UpdatePostUseCase,
     DeletePostUseCase,

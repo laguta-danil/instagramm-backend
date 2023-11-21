@@ -27,7 +27,8 @@ model User {
   usersConfirmEmail UsersConfirmEmail?
   passwordRecovery  PasswordRecovery?
   posts             Post[]
-  role              Role              @default(USER)
+  usersPhoto        String[]
+  role              Role               @default(USER)
   isUserBlocked     Boolean            @default(false)
 
   @@map("user")

@@ -7,6 +7,7 @@ import { AwsSetting } from '../../utils/aws.setting.enum';
 
 const { AWS_PROFILE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } =
   AwsSetting;
+
 @Injectable()
 export class AwsS3Service {
   constructor(private configService: ConfigService) {}
@@ -44,6 +45,10 @@ export class AwsS3Service {
     } catch (e) {
       logger.log(e, 'Amazon file upload error');
     }
+  }
+
+  removeDuplicates(data) {
+    return [...new Set(data)];
   }
 
   // findOne(id: number) {

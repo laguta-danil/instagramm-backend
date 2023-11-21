@@ -61,6 +61,9 @@ export class User2 implements UserClient {
   })
   refreshToken: string;
 
+  @Field(() => [String])
+  usersPhoto: string[];
+
   @Field(() => Role)
   role: Role;
 

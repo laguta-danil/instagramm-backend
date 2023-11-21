@@ -5,6 +5,7 @@ import { CreatePostDto } from './create-post.dto';
 export class UpdatePostDto extends CreatePostDto {
   likes?: number;
   share?: string[];
+  usersPhoto?: string[];
   userId: string;
 }
 
