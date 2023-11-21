@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   Args,
+  Context,
   Int,
   Mutation,
   Parent,
@@ -10,9 +11,12 @@ import {
   Resolver
 } from '@nestjs/graphql';
 
+import { HasRoles } from '../../infra/decorator/user/has-roles.decorator';
 import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
 import { JwtAuthGQLGuard } from '../../infra/strategis/jwtGQL.strategy';
+import { RoleGuard } from '../../infra/strategis/role.guard';
 
+import { Role } from './dto/role.enum';
 import { User2, Users } from './model/user.model';
 import { DeleteUserCommand } from './use-case/delete.user.use-case';
 import { UserService } from './user.service';
@@ -24,7 +28,8 @@ export class UserResolver {
     private commandBus: CommandBus
   ) {}
 
-  @UseGuards(JwtAuthGQLGuard)
+  @HasRoles(Role.ADMIN)
+  @UseGuards(JwtAuthGQLGuard, RoleGuard)
   @Query(() => Users)
   async getAllUsers(
     @Args('page', { nullable: true, type: () => Int }) page: number,
@@ -34,7 +39,8 @@ export class UserResolver {
     @Args('sortByCreateDate', { nullable: true, type: () => String })
     sortByCreateDate: string,
     @Args('sortByUserName', { nullable: true, type: () => String })
-    sortByUserName: string
+    sortByUserName: string,
+    @Context() context: any
   ) {
     return this.userService.getAllUsers(
       page,

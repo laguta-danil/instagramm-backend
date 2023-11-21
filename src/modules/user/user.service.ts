@@ -45,7 +45,7 @@ export class UserService {
 
   async getAdminRole(id) {
     const user = await this.getUserById(id);
-    user.role = 'Admin';
+    user.role = 'ADMIN';
 
     return this.usersRepo.updateUserProfile(id, user);
   }

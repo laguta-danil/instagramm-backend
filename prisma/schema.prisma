@@ -27,10 +27,15 @@ model User {
   usersConfirmEmail UsersConfirmEmail?
   passwordRecovery  PasswordRecovery?
   posts             Post[]
-  role              String             @default("User")
+  role              Role              @default(USER)
   isUserBlocked     Boolean            @default(false)
 
   @@map("user")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model UsersConfirmEmail {

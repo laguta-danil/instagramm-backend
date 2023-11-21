@@ -22,6 +22,7 @@ import { UserService } from './user.service';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
       context: ({ req, reply }) => ({
+        authScope: req.headers.authorization,
         req,
         response: reply
       }),
@@ -33,8 +34,6 @@ import { UserService } from './user.service';
           'request.credentials': 'include' // Otherwise cookies won't be sent
         }
       }
-      // installSubscriptionHandlers: true
-      // typePaths: ['./**/*.graphql']
     })
   ],
   providers: [

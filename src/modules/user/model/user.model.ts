@@ -1,6 +1,8 @@
 import { Field, HideField, Int, ObjectType } from '@nestjs/graphql';
 import { User as UserClient } from '@prisma/client';
 
+import { Role } from '../dto/role.enum';
+
 @ObjectType()
 export class User2 implements UserClient {
   @Field(() => String)
@@ -59,8 +61,8 @@ export class User2 implements UserClient {
   })
   refreshToken: string;
 
-  @Field(() => String)
-  role: string;
+  @Field(() => Role)
+  role: Role;
 
   @Field(() => Boolean)
   isUserBlocked: boolean;
