@@ -12,7 +12,6 @@ import {
 } from '@nestjs/graphql';
 
 import { HasRoles } from '../../infra/decorator/user/has-roles.decorator';
-import JwtAuthGuard from '../../infra/guards/jwt-auth.guard';
 import { JwtAuthGQLGuard } from '../../infra/strategis/jwtGQL.strategy';
 import { RoleGuard } from '../../infra/strategis/role.guard';
 
@@ -65,7 +64,7 @@ export class UserResolver {
     return this.commandBus.execute(new DeleteUserCommand({ id: id }));
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGQLGuard)
   @Mutation(() => User2)
   async getAdminRole(
     @Args('id', { type: () => String }) id: number
