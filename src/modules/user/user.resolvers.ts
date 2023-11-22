@@ -58,6 +58,8 @@ export class UserResolver {
     return this.userService.getUserById(id);
   }
 
+  @HasRoles(Role.ADMIN)
+  @UseGuards(JwtAuthGQLGuard, RoleGuard)
   @Mutation(() => User2)
   async deleteUser(@Args('id', { type: () => String }) id: string) {
     return this.commandBus.execute(new DeleteUserCommand({ id: id }));
